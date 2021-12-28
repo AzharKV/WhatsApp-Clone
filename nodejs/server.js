@@ -36,23 +36,37 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(require("./routes/auth"));
 
 //socket middleware
-io.use(require("./middleware/socket_middleware"));
+//io.use(require("./middleware/socket_auth"));
 
 //socket connection
-io.of("/socket").on("connection", (socket) => {
+io.on("connection", (socket) => {
   console.log("connection established by ", socket.id);
 
-  socket.on("connect_error", (err) => {
-    console.log(`connect_error due to ${err.message}`);
+  const User = mongoose.model("User");
+
+  User.findByIdAndUpdate(socket.data.userId, {
+    $set: { socketId: socket.id },
+  }).exec((error) => {
+    if (error) console.log(error);
   });
 
-  socket.on("disconnect", () =>
-    console.log("connection closed by ", socket.id)
+  socket.on("connect_error", (err) =>
+    console.log(`connect_error due to ${err.message}`)
   );
+
+  socket.on("disconnect", () => {
+    console.log("connection closed by ", socket.id);
+
+    User.findByIdAndUpdate(socket.data.userId, { $set: { socketId: "" } }).exec(
+      (error) => {
+        if (error) console.log(error);
+      }
+    );
+  });
 
   //socket connection test
   //socket
-  require("./sockets/socket")(socket);
+  require("./sockets/single_chat")(socket);
 });
 
 http.listen(5678, () => console.log("connected"));
