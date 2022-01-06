@@ -17,17 +17,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  lastSeen: {
-    type: String,
-    required: true,
-  },
+  lastSeen: { type: Date, default: Date.now },
   status: {
     type: Boolean,
-    required: true,
   },
   socketId: {
     type: String,
-    required: false,
   },
 });
 

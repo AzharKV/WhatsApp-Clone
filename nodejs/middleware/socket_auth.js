@@ -14,7 +14,8 @@ module.exports = (socket, next) => {
 
     User.findById(id).then((userData) => {
       if (userData) {
-        socket.data = { userId: userData._id };
+        socket.data = { userId: userData._id, userName: userData.name };
+        console.log("socket connected by",userData.name);
         return next();
       } else return next(Error("Invalid Token else"));
     });

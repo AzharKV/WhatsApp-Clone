@@ -1,18 +1,14 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
-
 const multer = require("multer")();
 
-const http = require("http").createServer(app, {
-  path: "/open",
-});
-
+const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 
 const mongoose = require("mongoose");
-
 const key = require("./key");
+const userController = require("./controller/user_controller");
 
 //mongoose connection
 mongoose.connect(key.MONGO_URL, {
@@ -25,8 +21,6 @@ mongoose.connection.on("error", (err) =>
   console.log("Error on connection", err)
 );
 
-require("./models/user");
-
 app.use(express.json());
 app.use(multer.array());
 
@@ -36,32 +30,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(require("./routes/auth"));
 
 //socket middleware
-//io.use(require("./middleware/socket_auth"));
+io.use(require("./middleware/socket_auth"));
 
 //socket connection
 io.on("connection", (socket) => {
-  console.log("connection established by ", socket.id);
-
-  const User = mongoose.model("User");
-
-  User.findByIdAndUpdate(socket.data.userId, {
-    $set: { socketId: socket.id },
-  }).exec((error) => {
-    if (error) console.log(error);
-  });
+  //update user status and socket id
+  userController.updateUserStatus(socket);
 
   socket.on("connect_error", (err) =>
     console.log(`connect_error due to ${err.message}`)
   );
 
   socket.on("disconnect", () => {
-    console.log("connection closed by ", socket.id);
-
-    User.findByIdAndUpdate(socket.data.userId, { $set: { socketId: "" } }).exec(
-      (error) => {
-        if (error) console.log(error);
-      }
-    );
+    //update last seen, status, socketId
+    userController.disconnectUser(socket);
   });
 
   //socket connection test
@@ -69,4 +51,4 @@ io.on("connection", (socket) => {
   require("./sockets/single_chat")(socket);
 });
 
-http.listen(5678, () => console.log("connected"));
+http.listen(5678, () => console.log("server running..."));
