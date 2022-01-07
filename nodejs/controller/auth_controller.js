@@ -18,6 +18,7 @@ const createUser = (req, res) => {
     if (!lastSeen) errorMap.lastSeen = "lastSeen is required";
     if (!about) errorMap.about = "about is required";
     if (!phone) errorMap.phone = "phone is required";
+    console.log(req.url, " ", req.method, "", errorMap);
     return res.status(422).json(errorMap);
   }
 
@@ -26,11 +27,16 @@ const createUser = (req, res) => {
     .then((savedUser) => {
       if (savedUser) {
         const token = jwt.sign({ _id: savedUser._id }, key.JWT_SECRET);
-        return res.json({
+
+        const result = {
           message: "User is already exist",
           token,
           user: savedUser,
-        });
+        };
+
+        console.log(req.url, " ", req.method, "", result);
+
+        return res.json(result);
       }
 
       const user = new User({
@@ -45,11 +51,28 @@ const createUser = (req, res) => {
       user.save().then((user) => {
         const token = jwt.sign({ _id: user._id }, key.JWT_SECRET);
 
-        res.json({ message: "Saved Successfully", token, user: user });
+        const result = { message: "Saved Successfully", token, user: user };
+
+        console.log(req.url, " ", req.method, "", result);
+
+        res.json(result);
       });
     });
 };
 
+const myDetails = (req, res) => {
+  const result = {
+    id: req.user._id,
+    name: req.user.name,
+    imageUrl: req.user.imageUrl,
+    about: req.user.about,
+  };
+
+  console.log(req.url, " ", req.method, "", req.user);
+  res.json(result);
+};
+
 module.exports = {
   createUser,
+  myDetails,
 };
