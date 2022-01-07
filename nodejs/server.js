@@ -29,6 +29,27 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //api routes
 app.use(require("./routes/auth"));
 
+//invalid api
+app.get("*", (req, res) => {
+  console.log("invalid request ", req.method, " ", req.url);
+  res.status(401).json({ error: "Invalid Request" });
+});
+
+app.post("*", (req, res) => {
+  console.log("invalid request ", req.method, " ", req.url);
+  res.status(401).json({ error: "Invalid Request" });
+});
+
+app.delete("*", (req, res) => {
+  console.log("invalid request ", req.method, " ", req.url);
+  res.status(401).json({ error: "Invalid Request" });
+});
+
+app.put("*", (req, res) => {
+  console.log("invalid request ", req.method, " ", req.url);
+  res.status(401).json({ error: "Invalid Request" });
+});
+
 //socket middleware
 io.use(require("./middleware/socket_auth"));
 
