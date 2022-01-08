@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:whatsapp_clone/controller/user_controller.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  static final UserController _userController = Get.put(UserController());
 
   @override
   Widget build(BuildContext context) {
@@ -9,7 +13,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Whatsapp"),
       ),
-      body: Container(),
+      body: Obx(() => Text(_userController.userData.value.name ?? ".....")),
     );
   }
 }

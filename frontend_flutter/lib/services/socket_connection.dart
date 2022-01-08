@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_flutter/const_files/keys/server_keys.dart';
-import 'package:frontend_flutter/const_files/keys/shared_pref_keys.dart';
-import 'package:frontend_flutter/services/shared_pref.dart';
+import 'package:whatsapp_clone/const_files/keys/server_keys.dart';
+import 'package:whatsapp_clone/const_files/keys/shared_pref_keys.dart';
+import 'package:whatsapp_clone/services/shared_pref.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class SocketConnection {
@@ -12,7 +12,7 @@ class SocketConnection {
     token = await SharedPref().readString(SharedPrefKeys().authToken);
 
     socket = io(
-        ServerKeys().baseUrl,
+        ServerKeys.socketBaseurl,
         OptionBuilder()
             .setTransports(['websocket'])
             .enableAutoConnect()
@@ -30,6 +30,6 @@ class SocketConnection {
 
   void _connectionError(dynamic data) {
     debugPrint("socket connection error $data");
-    connectToSocket();
+    //connectToSocket();
   }
 }

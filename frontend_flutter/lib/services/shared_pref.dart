@@ -10,4 +10,9 @@ class SharedPref {
     final pref = await SharedPreferences.getInstance();
     pref.setString(key, value);
   }
+
+  Future<void> remove(String key) async {
+    final pref = await SharedPreferences.getInstance();
+    pref.remove(key);
+  }
 }

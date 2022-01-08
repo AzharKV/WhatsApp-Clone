@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_flutter/services/socket_connection.dart';
+import 'package:whatsapp_clone/routes/app_routes.dart';
+import 'package:whatsapp_clone/routes/routes_names.dart';
+import 'package:whatsapp_clone/services/socket_connection.dart';
+import 'package:whatsapp_clone/theme/light_theme.dart';
 import 'package:get/get.dart';
 
 void main() {
@@ -12,17 +15,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'WhatsappClone',
-      theme: ThemeData(primarySwatch: Colors.green),
+      title: 'whatsapp_clone',
+      theme: lightTheme,
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.downToUp,
-      initialRoute: '/',
+      initialRoute: RoutesNames.home,
+      getPages: AppRoutes.routes,
       // onInit: () {
       //   SharedPref().saveString(SharedPrefKeys().authToken,
       //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWM5ZjgxYzA2NTgzMGNjMzAzOWM3ZWYiLCJpYXQiOjE2NDA2MjYyMDR9.lqIa5VYK2ZJmxZP5joHoSP0nDxwJqX_zbN2lbt64rUI");
       // },
       onReady: () => SocketConnection().connectToSocket(),
-      home: Scaffold(),
     );
   }
 }

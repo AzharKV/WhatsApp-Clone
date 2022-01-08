@@ -1,5 +1,5 @@
-import 'package:frontend_flutter/routes/routes_names.dart';
-import 'package:frontend_flutter/screens/home/home_screen.dart';
+import 'package:whatsapp_clone/routes/routes_names.dart';
+import 'package:whatsapp_clone/screens/home/home_screen.dart';
 import 'package:get/get.dart';
 
 class AppRoutes {
