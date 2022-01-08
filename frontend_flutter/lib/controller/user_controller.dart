@@ -1,8 +1,8 @@
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:whatsapp_clone/models/user/user_model.dart';
 import 'package:whatsapp_clone/repository/user_repository.dart';
 import 'package:whatsapp_clone/utility/utility.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
 
 class UserController extends GetxController {
   UserRepository userRepository = UserRepository();

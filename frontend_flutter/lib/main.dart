@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:whatsapp_clone/routes/app_routes.dart';
 import 'package:whatsapp_clone/routes/routes_names.dart';
 import 'package:whatsapp_clone/services/socket_connection.dart';
 import 'package:whatsapp_clone/theme/light_theme.dart';
-import 'package:get/get.dart';
 
 void main() {
   runApp(const MyApp());

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import 'package:whatsapp_clone/const_files/keys/server_keys.dart';
 import 'package:whatsapp_clone/const_files/keys/shared_pref_keys.dart';
 import 'package:whatsapp_clone/services/shared_pref.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 
 class SocketConnection {
   late Socket socket;

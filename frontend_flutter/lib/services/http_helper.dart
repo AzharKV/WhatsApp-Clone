@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:whatsapp_clone/exceptions/fetch_data_exception.dart';
 import 'package:whatsapp_clone/utility/utility.dart';
-import 'package:http/http.dart' as http;
 
 class HttpHelper {
   Future<dynamic> get(String url, {bool auth = true}) async {

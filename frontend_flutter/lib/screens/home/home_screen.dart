@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:whatsapp_clone/controller/user_controller.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp_clone/controller/user_controller.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
