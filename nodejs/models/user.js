@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const moment = require("moment");
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -17,7 +19,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  lastSeen: { type: Date, default: Date.now },
+  lastSeen: { type: Date, default: moment().format() },
   status: {
     type: Boolean,
   },

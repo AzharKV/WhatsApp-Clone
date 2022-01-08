@@ -5,6 +5,8 @@ const User = mongoose.model("User");
 const jwt = require("jsonwebtoken");
 const key = require("../key");
 
+const moment = require("moment");
+
 const createUser = (req, res) => {
   const { name, imageUrl, status, lastSeen, about, phone } = req.body;
 
@@ -32,6 +34,7 @@ const createUser = (req, res) => {
           message: "User is already exist",
           token,
           user: savedUser,
+          createdAt: moment().format(),
         };
 
         console.log(req.url, " ", req.method, "", result);
@@ -51,7 +54,12 @@ const createUser = (req, res) => {
       user.save().then((user) => {
         const token = jwt.sign({ _id: user._id }, key.JWT_SECRET);
 
-        const result = { message: "Saved Successfully", token, user: user };
+        const result = {
+          message: "Saved Successfully",
+          token,
+          user,
+          createdAt: moment().format(),
+        };
 
         console.log(req.url, " ", req.method, "", result);
 
@@ -66,9 +74,10 @@ const myDetails = (req, res) => {
     name: req.user.name,
     imageUrl: req.user.imageUrl,
     about: req.user.about,
+    createdAt: moment().format(),
   };
 
-  console.log(req.url, " ", req.method, "", req.user);
+  console.log(req.url, " ", req.method, " ", result);
   res.json(result);
 };
 

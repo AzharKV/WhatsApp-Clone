@@ -3,6 +3,8 @@ require("../models/user");
 
 const User = mongoose.model("User");
 
+const moment = require("moment");
+
 const updateUserStatus = (socket) => {
   User.findByIdAndUpdate(socket.data.userId, {
     $set: { socketId: socket.id, status: true },
@@ -13,7 +15,7 @@ const updateUserStatus = (socket) => {
 
 const disconnectUser = (socket) => {
   User.findByIdAndUpdate(socket.data.userId, {
-    $set: { socketId: "", status: false, lastSeen: Date.now() },
+    $set: { socketId: "", status: false, lastSeen: moment().format() },
   }).exec((error) => {
     console.log("socket disconnected by ", socket.data.userName);
     if (error) console.log(error);
