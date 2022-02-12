@@ -18,7 +18,7 @@ mongoose.connect(key.MONGO_URL, {
 mongoose.connection.on("connected", () => console.log("Connected to mongodb"));
 
 mongoose.connection.on("error", (err) =>
-  console.log("Error on connection", err)
+  console.log("Error on connection ", err)
 );
 
 app.use(express.json());
@@ -26,8 +26,16 @@ app.use(multer.array());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//set io to req.io for access from all routes
+app.use((req, res, next) => {
+  req.io = io;
+  return next();
+});
+
 //api routes
 app.use(require("./routes/auth"));
+app.use(require("./routes/user"));
+app.use(require("./routes/message"));
 
 //invalid api
 app.get("*", (req, res) => {
@@ -56,7 +64,7 @@ io.use(require("./middleware/socket_auth"));
 //socket connection
 io.on("connection", (socket) => {
   //update user status and socket id
-  userController.updateUserStatus(socket);
+  userController.updateUserStatus(socket, io);
 
   socket.on("connect_error", (err) =>
     console.log(`connect_error due to ${err.message}`)
@@ -64,12 +72,12 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     //update last seen, status, socketId
-    userController.disconnectUser(socket);
+    userController.disconnectUser(socket, io);
   });
 
-  //socket connection test
-  //socket
-  require("./sockets/single_chat")(socket);
+  //socket connection
+
+  require("./sockets/user_status")(socket);
 });
 
 http.listen(5678, () => console.log("server running..."));
