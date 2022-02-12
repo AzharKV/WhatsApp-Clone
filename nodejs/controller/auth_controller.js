@@ -12,12 +12,9 @@ const createUser = (req, res) => {
 
   let errorMap = {};
 
-  if (!name || !imageUrl || !status || !lastSeen || !about || !phone) {
+  if (!name || !about || !phone) {
     errorMap.error = "Please input all fields";
     if (!name) errorMap.name = "name is required";
-    if (!imageUrl) errorMap.imageUrl = "imageUrl is required";
-    if (!status) errorMap.status = "status is required";
-    if (!lastSeen) errorMap.lastSeen = "lastSeen is required";
     if (!about) errorMap.about = "about is required";
     if (!phone) errorMap.phone = "phone is required";
     console.log(req.url, " ", req.method, "", errorMap);
@@ -70,7 +67,7 @@ const createUser = (req, res) => {
 
 const myDetails = (req, res) => {
   const result = {
-    id: req.user._id,
+    _id: req.user._id,
     name: req.user.name,
     imageUrl: req.user.imageUrl,
     about: req.user.about,

@@ -13,18 +13,22 @@ const userSchema = new mongoose.Schema({
   },
   imageUrl: {
     type: String,
-    required: true,
+    required: false,
   },
   about: {
     type: String,
     required: true,
   },
-  lastSeen: { type: Date, default: moment().format() },
+  lastSeen: { type: Date, default: moment().format(), required: false },
   status: {
     type: Boolean,
+    default: false,
+    required: false,
   },
   socketId: {
     type: String,
+    default: "",
+    required: false,
   },
 });
 
