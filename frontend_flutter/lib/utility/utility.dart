@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:whatsapp_clone/utility/http_header.dart';
 import 'package:whatsapp_clone/utility/http_response_case.dart';
 
 class Utility {
@@ -9,8 +8,6 @@ class Utility {
           http.Response response, String url, String method) =>
       httpResponseCase(response, url, method);
 
-  //http header
-  static Future<Map<String, String>> getHeader(bool auth) => httpHeader(auth);
 
   // http response validation
 

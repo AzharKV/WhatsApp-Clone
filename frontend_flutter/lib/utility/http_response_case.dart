@@ -8,7 +8,7 @@ dynamic httpResponseCase(http.Response response, String url, String method) {
   var responseBody = jsonDecode(response.body);
   try {
     debugPrint(
-        "url: $url \nmethod: $method code: ${response.statusCode}\nresponse $responseBody");
+        "*Response of url: $url \nmethod: $method code: ${response.statusCode}\nresponse $responseBody*");
   } catch (e) {
     debugPrint("Server Error");
   }

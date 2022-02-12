@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp_clone/controller/socket_controller.dart';
 import 'package:whatsapp_clone/routes/app_routes.dart';
 import 'package:whatsapp_clone/routes/routes_names.dart';
-import 'package:whatsapp_clone/services/socket_connection.dart';
 import 'package:whatsapp_clone/theme/light_theme.dart';
 
 void main() {
@@ -11,6 +11,9 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  static SocketController socketController =
+      Get.put(SocketController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +26,9 @@ class MyApp extends StatelessWidget {
       getPages: AppRoutes.routes,
       // onInit: () {
       //   SharedPref().saveString(SharedPrefKeys().authToken,
-      //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWM5ZjgxYzA2NTgzMGNjMzAzOWM3ZWYiLCJpYXQiOjE2NDA2MjYyMDR9.lqIa5VYK2ZJmxZP5joHoSP0nDxwJqX_zbN2lbt64rUI");
+      //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWM5ZjgxYzA2NTgzMGNjMzAzOWM3ZWYiLCJpYXQiOjE2NDQxMjE4ODF9.YvHmYMT2qYNMe6TULyThi38hs9ebjvx-2D5mthqUtHc");
       // },
-      onReady: () => SocketConnection().connectToSocket(),
+      onReady: () => socketController.connectToSocket(),
     );
   }
 }
