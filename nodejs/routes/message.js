@@ -7,4 +7,10 @@ const auth = require("../middleware/api_auth");
 //sendMessage
 router.post("/sendMessage", auth, controller.sendMessage);
 
+//messageReceived
+router.put("/receivedMessageUpdate", auth, controller.messageReceived);
+
+//messageOpened
+router.put("/openedMessageUpdate", auth, controller.messageOpened);
+
 module.exports = router;

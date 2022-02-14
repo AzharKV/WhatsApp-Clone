@@ -21,6 +21,10 @@ mongoose.connection.on("error", (err) =>
   console.log("Error on connection ", err)
 );
 
+require("./models/user");
+require("./models/message");
+require("./models/pending_message");
+
 app.use(express.json());
 app.use(multer.array());
 
@@ -64,7 +68,7 @@ io.use(require("./middleware/socket_auth"));
 //socket connection
 io.on("connection", (socket) => {
   //update user status and socket id
-  userController.updateUserStatus(socket, io);
+  userController.onUserConnect(socket, io);
 
   socket.on("connect_error", (err) =>
     console.log(`connect_error due to ${err.message}`)
@@ -76,8 +80,6 @@ io.on("connection", (socket) => {
   });
 
   //socket connection
-
-  require("./sockets/user_status")(socket);
 });
 
 http.listen(5678, () => console.log("server running..."));

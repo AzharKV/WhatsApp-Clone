@@ -1,20 +1,15 @@
-import 'dart:convert';
-
-import '../models/message/messageModel.dart';
-import '../services/api_names.dart';
+import '../const_files/api_names.dart';
 import '../services/http_helper.dart';
 
 class ChatRepository {
   final HttpHelper _httpHelper = HttpHelper();
 
-  Future<dynamic> sendMessage(dynamic body) async {
-    var response = await _httpHelper.post(Api.sendMessage, body);
+  Future<dynamic> sendMessage(dynamic body) async =>
+      await _httpHelper.post(Api.sendMessage, body);
 
-    if (response.runtimeType.toString() == "Response") {
-      MessageModel messageModel =
-          MessageModel.fromMap(jsonDecode(response.body));
-      return messageModel;
-    }
-    return response;
-  }
+  Future<dynamic> receivedMessageUpdate(dynamic body) async =>
+      await _httpHelper.put(Api.receivedMessageUpdate, body);
+
+  Future<dynamic> openedMessageUpdate(dynamic body) async =>
+      await _httpHelper.put(Api.openedMessageUpdate, body);
 }

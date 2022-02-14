@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp_clone/controller/socket_controller.dart';
+import 'package:whatsapp_clone/databse/databse_helper.dart';
 import 'package:whatsapp_clone/routes/app_routes.dart';
 import 'package:whatsapp_clone/routes/routes_names.dart';
 import 'package:whatsapp_clone/theme/light_theme.dart';
 
-void main() {
+Future<void> main() async {
+  await DatabaseHelper().initDB();
   runApp(const MyApp());
 }
 
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
       getPages: AppRoutes.routes,
       // onInit: () {
       //   SharedPref().saveString(SharedPrefKeys().authToken,
-      //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWM5ZjgxYzA2NTgzMGNjMzAzOWM3ZWYiLCJpYXQiOjE2NDQxMjE4ODF9.YvHmYMT2qYNMe6TULyThi38hs9ebjvx-2D5mthqUtHc");
+      //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWMyMjMxOGRlZTEwMTc2OGJiNTBlNmUiLCJpYXQiOjE2NDQ2ODc1NzF9.7n9IlZ7gtbDYOUVt_PlAqpyEQGJAmEMyq2AK6BUOs_M");
       // },
       onReady: () => socketController.connectToSocket(),
     );

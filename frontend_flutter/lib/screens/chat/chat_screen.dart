@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:whatsapp_clone/const_files/db_names.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
 import 'package:whatsapp_clone/controller/user_controller.dart';
-import 'package:whatsapp_clone/models/message/messageModel.dart';
+import 'package:whatsapp_clone/databse/db_models/db_message_model.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({Key? key, required this.userId, required this.userName})
@@ -33,29 +35,68 @@ class ChatScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: Obx(
-              () => ListView.builder(
-                reverse: true,
-                itemCount: chatController.message.length,
-                itemBuilder: (BuildContext context, int index) {
-                  MessageModel message = chatController.message[index];
+            child: ValueListenableBuilder(
+              valueListenable:
+                  Hive.box<DbMessageModel>(DbNames.message).listenable(),
+              builder: (BuildContext context, Box<DbMessageModel> value,
+                  Widget? child) {
+                List<DbMessageModel> fromCurrentUser = value.values
+                    .where((c) =>
+                        c.to.contains(userId) &&
+                        c.from.contains(userController.userId))
+                    .toList();
 
-                  return ListTile(
-                    title: Text(
-                      message.message.toString(),
-                      textAlign: message.from == userController.userId.value
-                          ? TextAlign.end
-                          : TextAlign.start,
-                    ),
-                    subtitle: Text(
-                      message.from.toString(),
-                      textAlign: message.from == userController.userId.value
-                          ? TextAlign.end
-                          : TextAlign.start,
-                    ),
-                  );
-                },
-              ),
+                List<DbMessageModel> fromThisUser = value.values
+                    .where((c) =>
+                        c.to.contains(userController.userId) &&
+                        c.from.contains(userId))
+                    .toList();
+
+                List<DbMessageModel> data = [
+                  ...fromCurrentUser,
+                  ...fromThisUser
+                ];
+
+                data.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
+                return data.isEmpty
+                    ? const Center(child: Text('No messages'))
+                    : ListView.builder(
+                        reverse: true,
+                        itemCount: data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          int newIndex = data.length - 1 - index;
+
+                          DbMessageModel message = data[newIndex];
+
+                          if (message.from == userId &&
+                              message.openedAt == null)
+                            chatController.openedMessageUpdate(message.id);
+
+                          return ListTile(
+                            title: Text(
+                              message.message.toString(),
+                              textAlign:
+                                  message.from == userController.userId.value
+                                      ? TextAlign.end
+                                      : TextAlign.start,
+                            ),
+                            subtitle: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment:
+                                  message.from == userController.userId.value
+                                      ? CrossAxisAlignment.end
+                                      : CrossAxisAlignment.start,
+                              children: [
+                                Text("c " + message.createdAt.toString()),
+                                Text("r " + message.receivedAt.toString()),
+                                Text("o " + message.openedAt.toString()),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+              },
             ),
           ),
           Row(

@@ -5,4 +5,8 @@ class Api {
   static const String usersList = ServerKeys.baseurl + "getUsers";
   static const String userStatus = ServerKeys.baseurl + "userStatus/";
   static const String sendMessage = ServerKeys.baseurl + "sendMessage";
+  static const String receivedMessageUpdate =
+      ServerKeys.baseurl + "receivedMessageUpdate";
+  static const String openedMessageUpdate =
+      ServerKeys.baseurl + "openedMessageUpdate";
 }

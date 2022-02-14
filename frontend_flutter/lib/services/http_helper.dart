@@ -27,7 +27,7 @@ class HttpHelper {
   }
 
   Future<dynamic> post(String url, dynamic body, {bool auth = true}) async {
-    debugPrint("requesting for " + url);
+    debugPrint("requesting for " + url + " body $body");
 
     Map<String, String>? header = await httpHeader(auth);
 
@@ -45,7 +45,7 @@ class HttpHelper {
   }
 
   Future<dynamic> put(String url, dynamic body, {bool auth = true}) async {
-    debugPrint("requesting for " + url);
+    debugPrint("requesting for " + url + " body $body");
     Map<String, String>? header = await httpHeader(auth);
 
     try {
@@ -85,7 +85,7 @@ class HttpHelper {
 
     if (auth) {
       String authToken =
-          await SharedPref().readString(SharedPrefKeys().authToken);
+          await SharedPref().readString(SharedPrefKeys.authToken);
 
       headers.addAll({HttpHeaders.authorizationHeader: "Bearer " + authToken});
     }

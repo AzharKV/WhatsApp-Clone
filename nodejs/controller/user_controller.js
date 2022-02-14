@@ -1,11 +1,21 @@
 const mongoose = require("mongoose");
 require("../models/user");
+require("../models/message");
+require("../models/pending_message");
 
 const User = mongoose.model("User");
+const Message = mongoose.model("Message");
+const PendingMessage = mongoose.model("PendingMessage");
 
 const moment = require("moment");
+const e = require("express");
 
-const updateUserStatus = (socket, io) => {
+const onUserConnect = (socket, io) => {
+  updateUserStatus(socket, io);
+  checkPendingMessages(socket);
+};
+
+function updateUserStatus(socket, io) {
   User.findByIdAndUpdate(socket.data.userId, {
     $set: { socketId: socket.id, status: true },
   }).exec((error) => {
@@ -15,7 +25,39 @@ const updateUserStatus = (socket, io) => {
 
     io.emit(eventString, true);
   });
-};
+}
+
+function checkPendingMessages(socket) {
+  PendingMessage.find({ toUserId: socket.data.userId })
+    .then((data) => {
+      data.forEach((element) => {
+        //get message content by element._id
+
+        Message.findById(element._id).then((messageData) => {
+          if (messageData == null) {
+            Message.findByIdAndRemove(element._id);
+          } else {
+            const data = {
+              id: messageData._id,
+              message: messageData.message,
+              from: messageData.from,
+              to: messageData.to,
+              messageType: messageData.messageType,
+              filePath: messageData.filePath,
+              createdAt: messageData.createdAt,
+            };
+
+            //send by socket
+
+            socket.emit("message", data);
+          }
+          //remove from pending
+          PendingMessage.findByIdAndRemove(element._id);
+        });
+      });
+    })
+    .catch((error) => console.log("check pending error ", error));
+}
 
 const disconnectUser = (socket, io) => {
   User.findByIdAndUpdate(socket.data.userId, {
@@ -84,9 +126,26 @@ const userStatus = (req, res) => {
     });
 };
 
+const accountExist = (req, res) => {
+  const phoneNumber = req.params.phone;
+
+  User.findOne({ phone: phoneNumber }).then((savedUser) => {
+    if (savedUser) {
+      console.log(req.url, " ", req.method, "", savedUser);
+
+      return res.json(savedUser);
+    } else {
+      console.log(req.url, " ", req.method, "", "Not found");
+
+      return res.status(401).json({ status: false, message: "User not found" });
+    }
+  });
+};
+
 module.exports = {
-  updateUserStatus,
+  onUserConnect,
   disconnectUser,
   getUsers,
   userStatus,
+  accountExist,
 };
