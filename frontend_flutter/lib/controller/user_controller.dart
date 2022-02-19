@@ -51,33 +51,13 @@ class UserController extends GetxController {
     }
   }
 
-  // Future<void> hiveTest() async {
-  //   Box box = await Hive.openBox('myBox');
-  //
-  //   print("db data ");
-  //
-  //   List getData = box.values.toList();
-  //
-  //   print("db data " + getData.toSet().toString());
-  //
-  //   box.put('name', 'Paul');
-  //
-  //   print("db data " + getData.toSet().toString());
-  //
-  //   box.put('friends', ['Dave', 'Simon', 'Lisa']);
-  //
-  //   print("db data " + getData.toSet().toString());
-  //
-  //   box.put(123, 'test');
-  //
-  //   print("db data " + getData.toSet().toString());
-  //
-  //   print("db data " + box.getAt(2));
-  //   print("db data " + box.get("friends").toString());
-  // }
+  void updateUserStatus(bool status) {
+    userRepository.updateUserStatus(status);
+  }
 
   @override
   void onInit() {
+    updateUserStatus(true);
     usersList();
     getMyDetails();
     super.onInit();

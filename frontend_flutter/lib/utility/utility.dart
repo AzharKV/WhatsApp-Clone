@@ -8,7 +8,6 @@ class Utility {
           http.Response response, String url, String method) =>
       httpResponseCase(response, url, method);
 
-
   // http response validation
 
   static void httpResponseValidation(response) {

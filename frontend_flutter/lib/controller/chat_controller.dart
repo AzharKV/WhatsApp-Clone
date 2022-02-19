@@ -29,6 +29,8 @@ class ChatController extends GetxController {
 
   TextEditingController messageTextField = TextEditingController();
 
+  RxString textControllerValue = "".obs;
+
   Future<void> checkUserStatus(String id) async {
     var result = await userRepository.getUserStatus(id);
 
@@ -55,12 +57,22 @@ class ChatController extends GetxController {
   }
 
   Future<void> sendMessage(String userId) async {
+    if (messageTextField.text.isEmpty)
+      sendVoice();
+    else
+      sendTextMessage(userId);
+  }
+
+  Future<void> sendVoice() async {}
+
+  Future<void> sendTextMessage(String userId) async {
     //unique message id generation by from user and to user id with current time microsecondsSinceEpoch
     String messageId =
         "${userController.userId.value}$userId${DateTime.now().microsecondsSinceEpoch}";
 
     String messageText = messageTextField.text;
     messageTextField.text = "";
+    textControllerValue.value = "";
 
     DateTime currentDate = DateTime.now();
 
@@ -118,7 +130,7 @@ class ChatController extends GetxController {
 
       MessageModel body = MessageModel(
         id: messageData!.id,
-        message: messageData.message,
+        message: messageData.message.isEmpty ? " " : messageData.message,
         from: messageData.from,
         to: messageData.to,
         createdAt: messageData.createdAt,

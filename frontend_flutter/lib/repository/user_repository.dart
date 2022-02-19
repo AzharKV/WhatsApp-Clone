@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:whatsapp_clone/const_files/api_names.dart';
 import 'package:whatsapp_clone/models/user/user_model.dart';
 import 'package:whatsapp_clone/models/user/user_status_model.dart';
 import 'package:whatsapp_clone/models/user/users_list_model.dart';
-import 'package:whatsapp_clone/const_files/api_names.dart';
 import 'package:whatsapp_clone/services/http_helper.dart';
 
 class UserRepository {
@@ -40,4 +40,7 @@ class UserRepository {
     }
     return response;
   }
+
+  Future<dynamic> updateUserStatus(bool status) async =>
+      await _httpHelper.put(Api.userStatus, {"status": "$status"});
 }

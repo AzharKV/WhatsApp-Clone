@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp_clone/const_files/my_color.dart';
 import 'package:whatsapp_clone/controller/socket_controller.dart';
 import 'package:whatsapp_clone/databse/databse_helper.dart';
 import 'package:whatsapp_clone/routes/app_routes.dart';
@@ -8,6 +10,10 @@ import 'package:whatsapp_clone/theme/light_theme.dart';
 
 Future<void> main() async {
   await DatabaseHelper().initDB();
+
+  SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarColor: MyColor.primaryColor));
+
   runApp(const MyApp());
 }
 
@@ -27,8 +33,8 @@ class MyApp extends StatelessWidget {
       initialRoute: RoutesNames.home,
       getPages: AppRoutes.routes,
       // onInit: () {
-      //   SharedPref().saveString(SharedPrefKeys().authToken,
-      //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWMyMjMxOGRlZTEwMTc2OGJiNTBlNmUiLCJpYXQiOjE2NDQ2ODc1NzF9.7n9IlZ7gtbDYOUVt_PlAqpyEQGJAmEMyq2AK6BUOs_M");
+      //   SharedPref().saveString(SharedPrefKeys.authToken,
+      //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWMyMjMxOGRlZTEwMTc2OGJiNTBlNmUiLCJpYXQiOjE2NDUxMjgxOTd9.WFUmHFEEsnUdAJi2-2MYGXA2aneBPeni0G1F7VC6gY0");
       // },
       onReady: () => socketController.connectToSocket(),
     );

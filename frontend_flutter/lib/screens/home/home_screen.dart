@@ -5,10 +5,32 @@ import 'package:whatsapp_clone/controller/user_controller.dart';
 import 'package:whatsapp_clone/models/user/user_model.dart';
 import 'package:whatsapp_clone/screens/chat/chat_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-  static final UserController _userController = Get.put(UserController());
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+  UserController userController = Get.put(UserController());
+
+  @override
+  void initState() {
+    WidgetsBinding.instance?.addObserver(this);
+
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed)
+      userController.updateUserStatus(true);
+    else
+      userController.updateUserStatus(false);
+
+    super.didChangeAppLifecycleState(state);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +46,16 @@ class HomeScreen extends StatelessWidget {
             margin: const EdgeInsets.all(16.0),
             alignment: Alignment.center,
             child:
-                Obx(() => Text(_userController.userData.value.name ?? ".....")),
+                Obx(() => Text(userController.userData.value.name ?? ".....")),
           ),
           Expanded(
             child: Obx(
               () => ListView.separated(
                 itemCount:
-                    _userController.usersListData.value.users?.length ?? 0,
+                    userController.usersListData.value.users?.length ?? 0,
                 itemBuilder: (BuildContext context, int index) {
                   UserModel? userModel =
-                      _userController.usersListData.value.users?[index];
+                      userController.usersListData.value.users?[index];
 
                   return ListTile(
                     title: Text(userModel?.name ?? ""),

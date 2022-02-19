@@ -11,7 +11,7 @@ const sendMessage = (req, res) => {
 
     const messageData = new Message({
       _id: id,
-      message: message,
+      message: message == null || message == "undefined" ? " " : message,
       from: from,
       to: to,
       messageType: messageType,

@@ -11,19 +11,15 @@ const moment = require("moment");
 const e = require("express");
 
 const onUserConnect = (socket, io) => {
-  updateUserStatus(socket, io);
+  updateSocketId(socket);
   checkPendingMessages(socket);
 };
 
-function updateUserStatus(socket, io) {
+function updateSocketId(socket) {
   User.findByIdAndUpdate(socket.data.userId, {
-    $set: { socketId: socket.id, status: true },
+    $set: { socketId: socket.id },
   }).exec((error) => {
     if (error) return console.log(error);
-
-    let eventString = "/user_status" + socket.data.userId;
-
-    io.emit(eventString, true);
   });
 }
 
@@ -61,7 +57,7 @@ function checkPendingMessages(socket) {
 
 const disconnectUser = (socket, io) => {
   User.findByIdAndUpdate(socket.data.userId, {
-    $set: { socketId: "", status: false, lastSeen: moment().format() },
+    $set: { socketId: "" },
   }).exec((error) => {
     if (error) return console.log(error);
 
@@ -142,10 +138,42 @@ const accountExist = (req, res) => {
   });
 };
 
+const updateUserStatus = (req, res) => {
+  const { status } = req.body;
+  const userId = req.user._id;
+
+  const io = req.io;
+
+  let updateData = { status: status };
+
+  if (status == "false")
+    updateData = { status: false, lastSeen: moment().format() };
+
+  User.findByIdAndUpdate(userId, {
+    $set: updateData,
+  }).exec((error) => {
+    if (error) return console.log(error);
+
+    let eventString = "/user_status" + userId;
+
+    let userStatus = false;
+
+    if (status == "true") userStatus = true;
+
+    io.emit(eventString, userStatus);
+
+    res.json({
+      status: true,
+      message: "Successfully updated",
+    });
+  });
+};
+
 module.exports = {
   onUserConnect,
   disconnectUser,
   getUsers,
   userStatus,
   accountExist,
+  updateUserStatus,
 };
