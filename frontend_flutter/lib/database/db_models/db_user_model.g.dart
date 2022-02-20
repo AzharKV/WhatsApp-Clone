@@ -20,7 +20,7 @@ class DbUserModelAdapter extends TypeAdapter<DbUserModel> {
       name: fields[1] as String,
       id: fields[0] as String,
       imagePath: fields[2] as String,
-      phone: fields[3] as int,
+      phone: fields[3] as String,
       about: fields[4] as String,
     );
   }

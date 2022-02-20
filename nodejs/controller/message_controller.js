@@ -58,19 +58,16 @@ const sendMessage = (req, res) => {
 
 const messageReceived = (req, res) => {
   try {
-    const { id, receivedAt } = req.body;
+    const { id, fromId, receivedAt } = req.body;
+    Message.findByIdAndRemove(id, (error) => {
+      if (error) console.log("message remove error ", error);
 
-    Message.findByIdAndUpdate(id, {
-      $set: { receivedAt: receivedAt },
-    }).exec((error, updatedData) => {
-      if (error) console.log("update error ", error);
-
-      PendingMessage.findByIdAndRemove(id, (err, doc) => {
+      PendingMessage.findByIdAndRemove(id, (err) => {
         if (err) console.log("pending delete error ", err);
 
         const io = req.io;
 
-        User.findById(updatedData.from).then((userData) => {
+        User.findById(fromId).then((userData) => {
           const socketId = userData.socketId;
 
           io.to(socketId).emit("messageReceived", {
@@ -92,27 +89,21 @@ const messageReceived = (req, res) => {
 
 const messageOpened = (req, res) => {
   try {
-    const { id, openedAt } = req.body;
+    const { id, fromId, openedAt } = req.body;
 
-    Message.findByIdAndUpdate(id, {
-      $set: { openedAt: openedAt },
-    }).exec((error, updatedData) => {
-      if (error) console.log("update error ", error);
+    const io = req.io;
 
-      const io = req.io;
+    User.findById(fromId).then((userData) => {
+      const socketId = userData.socketId;
 
-      User.findById(updatedData.from).then((userData) => {
-        const socketId = userData.socketId;
-
-        io.to(socketId).emit("messageOpened", {
-          messageId: id,
-          openedAt: openedAt,
-        });
-
-        console.log(req.url, " ", req.method, "", { message: "Success" });
-
-        return res.json({ message: "Success" });
+      io.to(socketId).emit("messageOpened", {
+        messageId: id,
+        openedAt: openedAt,
       });
+
+      console.log(req.url, " ", req.method, "", { message: "Success" });
+
+      return res.json({ message: "Success" });
     });
   } catch (e) {
     console.log("OpenedAt message error ", e);

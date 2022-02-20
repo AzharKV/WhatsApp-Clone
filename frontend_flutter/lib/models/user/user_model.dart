@@ -12,42 +12,36 @@ class UserModel {
   UserModel({
     this.id,
     this.name,
-    this.phone,
     this.imageUrl,
+    this.phone,
     this.about,
-    this.lastSeen,
-    this.status,
-    this.socketId,
+    this.createdAt,
   });
 
   String? id;
   String? name;
-  String? phone;
   String? imageUrl;
+  String? phone;
   String? about;
-  DateTime? lastSeen;
-  bool? status;
-  String? socketId;
+  DateTime? createdAt;
 
   factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
-        id: json["_id"],
-        name: json["name"],
-        phone: json["phone"],
-        imageUrl: json["imageUrl"],
-        about: json["about"],
-        lastSeen: DateTime.parse(json["lastSeen"] ?? DateTime.now().toString()),
-        status: json["status"],
-        socketId: json["socketId"],
+        id: json["id"] == null ? null : json["id"],
+        name: json["name"] == null ? null : json["name"],
+        imageUrl: json["imageUrl"] == null ? null : json["imageUrl"],
+        phone: json["phone"] == null ? null : json["phone"],
+        about: json["about"] == null ? null : json["about"],
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
       );
 
   Map<String, dynamic> toMap() => {
-        "_id": id,
-        "name": name,
-        "phone": phone,
-        "imageUrl": imageUrl,
-        "about": about,
-        "lastSeen": lastSeen?.toIso8601String(),
-        "status": status,
-        "socketId": socketId,
+        "id": id == null ? null : id,
+        "name": name == null ? null : name,
+        "imageUrl": imageUrl == null ? null : imageUrl,
+        "phone": phone == null ? null : phone,
+        "about": about == null ? null : about,
+        "createdAt": createdAt == null ? null : createdAt!.toIso8601String(),
       };
 }

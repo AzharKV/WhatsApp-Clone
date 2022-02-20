@@ -67,9 +67,10 @@ const createUser = (req, res) => {
 
 const myDetails = (req, res) => {
   const result = {
-    _id: req.user._id,
+    id: req.user._id,
     name: req.user.name,
     imageUrl: req.user.imageUrl,
+    phone: req.user.phone,
     about: req.user.about,
     createdAt: moment().format(),
   };

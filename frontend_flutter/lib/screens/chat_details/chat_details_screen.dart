@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp_clone/const_widgets/sizedbox.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
 import 'package:whatsapp_clone/controller/user_controller.dart';
-import 'package:whatsapp_clone/screens/chat/components/message_list.dart';
-import 'package:whatsapp_clone/screens/chat/components/message_send_tile.dart';
-import 'package:whatsapp_clone/screens/chat/widgets/chat_user_header.dart';
-import 'package:whatsapp_clone/widgets/sizedbox.dart';
+import 'package:whatsapp_clone/screens/chat_details/components/message_list.dart';
+import 'package:whatsapp_clone/screens/chat_details/components/message_send_tile.dart';
+import 'package:whatsapp_clone/screens/chat_details/widgets/chat_user_header.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({Key? key, required this.userId, required this.userName})
@@ -28,8 +28,8 @@ class ChatScreen extends StatelessWidget {
               height: 35.0,
               width: 35.0,
               decoration: BoxDecoration(
-                  color: Colors.grey.shade400, shape: BoxShape.circle),
-              child: const Icon(Icons.photo_camera),
+                  color: Colors.grey.shade300, shape: BoxShape.circle),
+              child: const Icon(Icons.person, size: 35.0, color: Colors.white),
             ),
             sizedBoxW8,
             ChatUserHeader(userName: userName, chatController: chatController),

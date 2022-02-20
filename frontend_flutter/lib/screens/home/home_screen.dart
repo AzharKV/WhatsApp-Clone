@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:whatsapp_clone/controller/chat_controller.dart';
 import 'package:whatsapp_clone/controller/user_controller.dart';
-import 'package:whatsapp_clone/models/user/user_model.dart';
-import 'package:whatsapp_clone/screens/chat/chat_screen.dart';
+import 'package:whatsapp_clone/screens/call_section/call_list_screen.dart';
+import 'package:whatsapp_clone/screens/camera_section/camera_screen.dart';
+import 'package:whatsapp_clone/screens/chat_list/chat_list_screen.dart';
+import 'package:whatsapp_clone/screens/status_section/status_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,6 +15,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   UserController userController = Get.put(UserController());
+
+  double customWidth = (Get.width - 20) / 5;
+  double customHeight = 40;
 
   @override
   void initState() {
@@ -34,53 +38,54 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Whatsapp"),
-      ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: Get.width,
-            margin: const EdgeInsets.all(16.0),
-            alignment: Alignment.center,
-            child:
-                Obx(() => Text(userController.userData.value.name ?? ".....")),
-          ),
-          Expanded(
-            child: Obx(
-              () => ListView.separated(
-                itemCount:
-                    userController.usersListData.value.users?.length ?? 0,
-                itemBuilder: (BuildContext context, int index) {
-                  UserModel? userModel =
-                      userController.usersListData.value.users?[index];
-
-                  return ListTile(
-                    title: Text(userModel?.name ?? ""),
-                    subtitle: Text(userModel?.id ?? ""),
-                    onTap: () {
-                      ChatController chatController = Get.put(ChatController());
-
-                      chatController.checkUserStatus(userModel!.id!);
-
-                      chatController.userStatus.value =
-                          userModel.status ?? false;
-
-                      Get.to(() => ChatScreen(
-                            userId: userModel.id ?? "",
-                            userName: userModel.name ?? "",
-                          ));
-                    },
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
+    return DefaultTabController(
+      length: 4,
+      initialIndex: 1,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('WhatsApp'),
+          actions: [
+            IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
+          ],
+          toolbarHeight: 48.0,
+          elevation: 0.0,
+          bottom: TabBar(
+            isScrollable: true,
+            indicatorColor: Colors.white,
+            tabs: [
+              Container(
+                width: 20,
+                height: customHeight,
+                alignment: Alignment.centerLeft,
+                child: const Icon(Icons.camera_alt),
               ),
-            ),
-          )
-        ],
+              Container(
+                  width: customWidth,
+                  height: customHeight,
+                  alignment: Alignment.center,
+                  child: const Text("CHATS")),
+              Container(
+                  width: customWidth,
+                  height: customHeight,
+                  alignment: Alignment.center,
+                  child: const Text("STATUS")),
+              Container(
+                  width: customWidth,
+                  height: customHeight,
+                  alignment: Alignment.center,
+                  child: const Text("CALL"))
+            ],
+          ),
+        ),
+        body: const TabBarView(
+          children: [
+            CameraScreen(),
+            ChatListScreen(),
+            StatusListScreen(),
+            CallListScreen()
+          ],
+        ),
       ),
     );
   }

@@ -99,15 +99,9 @@ const userStatus = (req, res) => {
       };
 
       if (userData) {
-        console.log(req.url, " ", req.method, " ", {
-          createdAt: moment().format(),
-          userData,
-        });
+        console.log(req.url, " ", req.method, " ", result);
 
-        return res.json({
-          createdAt: moment().format(),
-          userData,
-        });
+        return res.json(result);
       } else {
         console.log(req.url, " ", req.method, " ", {
           createdAt: moment().format(),
@@ -120,22 +114,6 @@ const userStatus = (req, res) => {
         });
       }
     });
-};
-
-const accountExist = (req, res) => {
-  const phoneNumber = req.params.phone;
-
-  User.findOne({ phone: phoneNumber }).then((savedUser) => {
-    if (savedUser) {
-      console.log(req.url, " ", req.method, "", savedUser);
-
-      return res.json(savedUser);
-    } else {
-      console.log(req.url, " ", req.method, "", "Not found");
-
-      return res.status(401).json({ status: false, message: "User not found" });
-    }
-  });
 };
 
 const updateUserStatus = (req, res) => {
@@ -162,11 +140,43 @@ const updateUserStatus = (req, res) => {
 
     io.emit(eventString, userStatus);
 
-    res.json({
+    return res.json({
       status: true,
       message: "Successfully updated",
     });
   });
+};
+
+const getUserDetails = (req, res) => {
+  const phoneNumber = req.params.phone;
+
+  if (phoneNumber.length > 5) {
+    User.findOne({ phone: phoneNumber }, (error, data) => {
+      if (data != null) {
+        const result = {
+          id: data._id,
+          name: data.name,
+          phone: data.phone,
+          imageUrl: data.imageUrl,
+          about: data.about,
+          createdAt: moment().format(),
+        };
+
+        console.log(req.url, " ", req.method, " ", result);
+        return res.json(result);
+      } else {
+        const result = { status: false, message: "User not found" };
+
+        console.log(req.url, " ", req.method, " ", result);
+        return res.status(404).json(result);
+      }
+    });
+  } else {
+    const result = { status: false, message: "Invalid number" };
+
+    console.log(req.url, " ", req.method, " ", result);
+    return res.status(400).json(result);
+  }
 };
 
 module.exports = {
@@ -174,6 +184,6 @@ module.exports = {
   disconnectUser,
   getUsers,
   userStatus,
-  accountExist,
   updateUserStatus,
+  getUserDetails,
 };

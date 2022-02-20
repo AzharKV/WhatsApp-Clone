@@ -6,7 +6,8 @@ import 'package:whatsapp_clone/const_files/db_names.dart';
 import 'package:whatsapp_clone/const_files/keys/server_keys.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
 import 'package:whatsapp_clone/controller/user_controller.dart';
-import 'package:whatsapp_clone/databse/db_models/db_message_model.dart';
+import 'package:whatsapp_clone/database/db_models/db_chat_list_model.dart';
+import 'package:whatsapp_clone/database/db_models/db_message_model.dart';
 import 'package:whatsapp_clone/models/message/messageModel.dart';
 import 'package:whatsapp_clone/repository/chat_repository.dart';
 import 'package:whatsapp_clone/services/shared_pref.dart';
@@ -15,6 +16,7 @@ import '../const_files/keys/shared_pref_keys.dart';
 
 class SocketController extends GetxController {
   Box messageBox = Hive.box<DbMessageModel>(DbNames.message);
+  Box chatListBox = Hive.box<DbChatListModel>(DbNames.chatList);
 
   ChatRepository chatRepository = ChatRepository();
 
@@ -66,6 +68,18 @@ class SocketController extends GetxController {
 
     DateTime currentDateTime = DateTime.now();
 
+    addToMessageDb(messageModel, currentDateTime);
+
+    addToChatList(messageModel, currentDateTime);
+
+    chatRepository.receivedMessageUpdate({
+      "id": messageModel.id,
+      "receivedAt": currentDateTime.toIso8601String(),
+      "fromId": messageModel.from
+    });
+  }
+
+  void addToMessageDb(MessageModel messageModel, DateTime currentDateTime) {
     DbMessageModel dbMessageModel = DbMessageModel(
       id: messageModel.id!,
       message: messageModel.message!,
@@ -79,32 +93,55 @@ class SocketController extends GetxController {
     );
 
     messageBox.put(messageModel.id, dbMessageModel);
+  }
 
-    chatRepository.receivedMessageUpdate({
-      "id": messageModel.id,
-      "receivedAt": currentDateTime.toIso8601String()
-    });
+  void addToChatList(MessageModel messageModel, DateTime currentDateTime) {
+    int messageCount = 1;
+
+    DbChatListModel? chatData = chatListBox.get(messageModel.from);
+
+    if (chatData != null) messageCount = chatData.unreadCount + 1;
+
+    DbChatListModel dbChatListModel = DbChatListModel(
+        message: messageModel.message!,
+        createdAt: currentDateTime,
+        messageId: messageModel.id!,
+        userId: messageModel.from!,
+        unreadCount: messageCount,
+        messageType: "text",
+        filePath: "",
+        tickCount: 0);
+
+    chatListBox.put(messageModel.from, dbChatListModel);
   }
 
   void messageReceived(data) {
     String messageId = data["messageId"];
     DateTime receivedDate = DateTime.parse(data["receivedAt"]);
 
+    //update message db
     DbMessageModel messageData = messageBox.get(messageId);
-
     messageData.receivedAt = receivedDate;
-
     messageBox.put(messageId, messageData);
+
+    //update chat list count
+    DbChatListModel chatData = chatListBox.get(messageData.to);
+    chatData.tickCount = 2;
+    chatListBox.put(messageData.to, chatData);
   }
 
   void messageOpened(data) {
     String messageId = data["messageId"];
     DateTime openedDate = DateTime.parse(data["openedAt"]);
 
+    //update message db
     DbMessageModel messageData = messageBox.get(messageId);
-
     messageData.openedAt = openedDate;
-
     messageBox.put(messageId, messageData);
+
+    //update chat list count
+    DbChatListModel chatData = chatListBox.get(messageData.to);
+    chatData.tickCount = 3;
+    chatListBox.put(messageData.to, chatData);
   }
 }

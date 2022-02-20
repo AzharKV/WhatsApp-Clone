@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:whatsapp_clone/const_files/my_color.dart';
-import 'package:whatsapp_clone/widgets/sizedbox.dart';
+import 'package:whatsapp_clone/const_widgets/sizedbox.dart';
 
 import 'clip_l_thread.dart';
 import 'clip_r_thread.dart';

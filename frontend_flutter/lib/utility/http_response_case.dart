@@ -9,6 +9,14 @@ dynamic httpResponseCase(http.Response response, String url, String method) {
   try {
     debugPrint(
         "*Response of url: $url \nmethod: $method code: ${response.statusCode}\nresponse $responseBody*");
+
+    switch (response.statusCode) {
+      case 200:
+        return response;
+
+      case 404:
+        return null;
+    }
   } catch (e) {
     debugPrint("Server Error");
   }

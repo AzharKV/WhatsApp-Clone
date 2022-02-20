@@ -14,7 +14,7 @@ class DbUserModel {
   final String imagePath;
 
   @HiveField(3)
-  final int phone;
+  final String phone;
 
   @HiveField(4)
   final String about;

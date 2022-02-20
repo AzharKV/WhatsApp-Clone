@@ -1,22 +1,24 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:whatsapp_clone/const_files/db_names.dart';
 import 'package:whatsapp_clone/controller/socket_controller.dart';
 import 'package:whatsapp_clone/controller/user_controller.dart';
-import 'package:whatsapp_clone/databse/db_models/db_message_model.dart';
-import 'package:whatsapp_clone/databse/db_models/db_pending_message_model.dart';
+import 'package:whatsapp_clone/database/db_models/db_chat_list_model.dart';
+import 'package:whatsapp_clone/database/db_models/db_message_model.dart';
+import 'package:whatsapp_clone/database/db_models/db_pending_message_model.dart';
 import 'package:whatsapp_clone/models/message/messageModel.dart';
-import 'package:whatsapp_clone/models/user/user_status_model.dart';
 import 'package:whatsapp_clone/repository/chat_repository.dart';
 import 'package:whatsapp_clone/repository/user_repository.dart';
+import 'package:whatsapp_clone/screens/chat_details/chat_details_screen.dart';
 import 'package:whatsapp_clone/utility/utility.dart';
 
-enum messageType { text, audio, image, video, document }
-
 class ChatController extends GetxController {
-  SocketController socketController = Get.find<SocketController>();
-  UserController userController = Get.find<UserController>();
+  SocketController socketController = Get.put(SocketController());
+  UserController userController = Get.put(UserController());
 
   UserRepository userRepository = UserRepository();
   ChatRepository chatRepository = ChatRepository();
@@ -24,6 +26,7 @@ class ChatController extends GetxController {
   Box<DbMessageModel> messageBox = Hive.box<DbMessageModel>(DbNames.message);
   Box<DbPendingMessageModel> pendingMessageBox =
       Hive.box<DbPendingMessageModel>(DbNames.pendingMessage);
+  Box chatListBox = Hive.box<DbChatListModel>(DbNames.chatList);
 
   RxBool userStatus = false.obs;
 
@@ -31,17 +34,34 @@ class ChatController extends GetxController {
 
   RxString textControllerValue = "".obs;
 
+  void navigateToChatDetailsScreen(String id, String name) {
+    setUnreadMessageToZero(id);
+    checkUserStatus(id);
+
+    messageTextField.text = "";
+    messageTextField.clear();
+
+    Get.to(() => ChatScreen(userId: id, userName: name));
+  }
+
+  void setUnreadMessageToZero(String userId) {
+    DbChatListModel? chatData = chatListBox.get(userId);
+
+    if (chatData != null) {
+      chatData.unreadCount = 0;
+      chatListBox.put(userId, chatData);
+    }
+  }
+
   Future<void> checkUserStatus(String id) async {
     var result = await userRepository.getUserStatus(id);
 
     try {
-      if (result.runtimeType.toString() == 'UserStatusModel') {
-        UserStatusModel data = result;
-
-        userStatus.value = data.userData?.status ?? false;
-      } else {
+      if (result.runtimeType.toString() == 'Response') {
+        var data = jsonDecode(result.body);
+        userStatus.value = data["status"] ?? false;
+      } else
         Utility.httpResponseValidation(result);
-      }
     } catch (e) {
       debugPrint("error usersList $e");
     }
@@ -76,6 +96,21 @@ class ChatController extends GetxController {
 
     DateTime currentDate = DateTime.now();
 
+    addToMessageDb(messageId, messageText, userId, currentDate);
+
+    addToPendingDb(messageId);
+
+    addToChatListDb(messageId, messageText, userId, currentDate);
+
+    addToServer(messageId, messageText, userId, currentDate);
+  }
+
+  void addToMessageDb(
+    String messageId,
+    String messageText,
+    String userId,
+    DateTime currentDate,
+  ) {
     DbMessageModel data = DbMessageModel(
       id: messageId,
       message: messageText,
@@ -87,13 +122,41 @@ class ChatController extends GetxController {
       messageType: "text",
       filePath: "",
     );
+    messageBox.put(messageId, data);
+  }
 
+  void addToPendingDb(String messageId) {
     DbPendingMessageModel pendingMessageModel =
         DbPendingMessageModel(messageId);
 
-    messageBox.put(messageId, data);
     pendingMessageBox.put(messageId, pendingMessageModel);
+  }
 
+  void addToChatListDb(
+    String messageId,
+    String messageText,
+    String userId,
+    DateTime currentDate,
+  ) {
+    DbChatListModel dbChatListModel = DbChatListModel(
+        message: messageText,
+        createdAt: currentDate,
+        messageId: messageId,
+        userId: userId,
+        unreadCount: 0,
+        messageType: "text",
+        filePath: "",
+        tickCount: 1);
+
+    chatListBox.put(userId, dbChatListModel);
+  }
+
+  Future<void> addToServer(
+    String messageId,
+    String messageText,
+    String userId,
+    DateTime currentDate,
+  ) async {
     MessageModel body = MessageModel(
       id: messageId,
       message: messageText,
@@ -109,11 +172,14 @@ class ChatController extends GetxController {
       pendingMessageBox.delete(messageId);
   }
 
-  void openedMessageUpdate(String id) {
+  void openedMessageUpdate(String id, String fromId) {
     DateTime currentDate = DateTime.now();
 
-    chatRepository.openedMessageUpdate(
-        {"id": id, "openedAt": currentDate.toIso8601String()});
+    chatRepository.openedMessageUpdate({
+      "id": id,
+      "openedAt": currentDate.toIso8601String(),
+      "fromId": fromId
+    });
 
     DbMessageModel? messageData = messageBox.get(id);
 
@@ -156,5 +222,20 @@ class ChatController extends GetxController {
   void dispose() {
     messageTextField.dispose();
     super.dispose();
+  }
+
+  String timerConverter(DateTime date) {
+    int currentDay = DateTime.now().day;
+    int previousDay = DateTime.now().subtract(const Duration(days: 1)).day;
+
+    int customDay = date.day;
+    int customPreviousDay = date.subtract(const Duration(days: 1)).day;
+
+    if (customDay == currentDay)
+      return DateFormat("hh:mm a").format(date);
+    else if (previousDay == customPreviousDay)
+      return "Yesterday";
+    else
+      return DateFormat("dd/MM/yy").format(date);
   }
 }

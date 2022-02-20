@@ -7,8 +7,8 @@ const auth = require("../middleware/api_auth");
 //user list
 router.get("/getUsers", auth, controller.getUsers);
 
-//check user exist
-router.get("/accountExist/:phone", auth, controller.accountExist);
+//get user details
+router.get("/user/:phone", auth, controller.getUserDetails);
 
 //get user status
 router.get("/userStatus/:id", auth, controller.userStatus);
