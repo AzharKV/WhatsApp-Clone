@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:whatsapp_clone/const_files/db_names.dart';
-import 'package:whatsapp_clone/const_files/keys/server_keys.dart';
+import 'package:whatsapp_clone/const/const_files/db_names.dart';
+import 'package:whatsapp_clone/const/const_files/keys/server_keys.dart';
+import 'package:whatsapp_clone/const/const_files/keys/shared_pref_keys.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
 import 'package:whatsapp_clone/controller/user_controller.dart';
 import 'package:whatsapp_clone/database/db_models/db_chat_list_model.dart';
 import 'package:whatsapp_clone/database/db_models/db_message_model.dart';
-import 'package:whatsapp_clone/models/message/messageModel.dart';
+import 'package:whatsapp_clone/model/message/messageModel.dart';
 import 'package:whatsapp_clone/repository/chat_repository.dart';
 import 'package:whatsapp_clone/services/shared_pref.dart';
 
-import '../const_files/keys/shared_pref_keys.dart';
 
 class SocketController extends GetxController {
   Box messageBox = Hive.box<DbMessageModel>(DbNames.message);

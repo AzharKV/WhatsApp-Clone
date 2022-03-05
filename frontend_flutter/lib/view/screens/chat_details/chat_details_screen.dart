@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:whatsapp_clone/const_widgets/sizedbox.dart';
+import 'package:whatsapp_clone/const/const_widgets/sizedbox.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
 import 'package:whatsapp_clone/controller/user_controller.dart';
-import 'package:whatsapp_clone/screens/chat_details/components/message_list.dart';
-import 'package:whatsapp_clone/screens/chat_details/components/message_send_tile.dart';
-import 'package:whatsapp_clone/screens/chat_details/widgets/chat_user_header.dart';
+import 'package:whatsapp_clone/view/screens/chat_details/components/message_list.dart';
+import 'package:whatsapp_clone/view/screens/chat_details/components/message_send_tile.dart';
+import 'package:whatsapp_clone/view/screens/chat_details/widgets/chat_user_header.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({Key? key, required this.userId, required this.userName})

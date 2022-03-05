@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:whatsapp_clone/const/const_files/keys/shared_pref_keys.dart';
 import 'package:whatsapp_clone/exceptions/fetch_data_exception.dart';
 import 'package:whatsapp_clone/services/shared_pref.dart';
 import 'package:whatsapp_clone/utility/utility.dart';
-
-import '../const_files/keys/shared_pref_keys.dart';
 
 class HttpHelper {
   Future<dynamic> get(String url, {bool auth = true}) async {

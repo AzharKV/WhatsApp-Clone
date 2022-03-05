@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:whatsapp_clone/const_files/my_color.dart';
+import 'package:whatsapp_clone/const/const_files/my_color.dart';
 import 'package:whatsapp_clone/controller/socket_controller.dart';
 import 'package:whatsapp_clone/database/database_helper.dart';
 import 'package:whatsapp_clone/routes/app_routes.dart';
 import 'package:whatsapp_clone/routes/routes_names.dart';
-import 'package:whatsapp_clone/theme/light_theme.dart';
+import 'package:whatsapp_clone/view/theme/light_theme.dart';
 
 Future<void> main() async {
   await DatabaseHelper().initDB();
