@@ -21,6 +21,10 @@ class UserController extends GetxController {
   Rx<UsersListModel> usersListData = UsersListModel().obs;
   RxString userId = "".obs;
 
+  RxInt usersCount = 0.obs;
+
+  RxBool contactsLoading = false.obs;
+
   Future<void> getMyDetails() async {
     var result = await userRepository.getMyDetails();
 
@@ -75,6 +79,8 @@ class UserController extends GetxController {
   }
 
   Future<void> updateContactDb() async {
+    contactsLoading.value = true;
+
     List<Contact> contactList = await getDeviceContact();
 
     for (var element in contactList) {
@@ -92,6 +98,8 @@ class UserController extends GetxController {
           }
         }
     }
+
+    contactsLoading.value = false;
   }
 
   Future<void> checkUser(String phoneNumber, String name) async {

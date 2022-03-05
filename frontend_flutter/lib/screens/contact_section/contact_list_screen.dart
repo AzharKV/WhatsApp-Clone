@@ -4,10 +4,13 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:whatsapp_clone/const_files/db_names.dart';
 import 'package:whatsapp_clone/const_files/my_color.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
+import 'package:whatsapp_clone/controller/user_controller.dart';
 import 'package:whatsapp_clone/database/db_models/db_user_model.dart';
 
 class ContactListScreen extends StatelessWidget {
   const ContactListScreen({Key? key}) : super(key: key);
+
+  static UserController userController = Get.put(UserController());
 
   @override
   Widget build(BuildContext context) {
@@ -16,25 +19,53 @@ class ContactListScreen extends StatelessWidget {
         title: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text("Select contact"),
-            Text(
-              "350 contact",
-              style: TextStyle(fontSize: 12.0),
+          children: [
+            const Text("Select contact"),
+            Obx(
+              () => userController.usersCount.value != 0
+                  ? Text("${userController.usersCount.value} contact",
+                      style: const TextStyle(fontSize: 12.0))
+                  : const SizedBox(),
             ),
           ],
         ),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
+          Obx(
+            () => userController.contactsLoading.value
+                ? Container(
+                    margin: const EdgeInsets.only(right: 8.0),
+                    height: 24.0,
+                    width: 24.0,
+                    child: const FittedBox(child: CircularProgressIndicator()))
+                : PopupMenuButton(
+                    icon: const Icon(Icons.more_vert),
+                    padding: EdgeInsets.zero,
+                    itemBuilder: (BuildContext context) => [
+                      PopupMenuItem(
+                          child: const Text("Invite a friend"), onTap: () {}),
+                      PopupMenuItem(
+                          child: const Text("Contacts"), onTap: () {}),
+                      PopupMenuItem(
+                          child: const Text("Refresh"),
+                          onTap: () {
+                            userController.updateContactDb();
+                          }),
+                      PopupMenuItem(child: const Text("Help"), onTap: () {}),
+                    ],
+                  ),
+          ),
         ],
       ),
       body: ValueListenableBuilder(
         valueListenable: Hive.box<DbUserModel>(DbNames.user).listenable(),
         builder: (BuildContext context, Box<DbUserModel> value, Widget? child) {
-          List<DbUserModel> data = value.values.toList();
-
+          List<DbUserModel> data = value.values
+              .where((element) => element.id != userController.userId.value)
+              .toList();
           data.sort((a, b) => a.name.compareTo(b.name));
+
+          userController.usersCount.value = data.length;
 
           return ListView.builder(
             itemCount: data.length,
