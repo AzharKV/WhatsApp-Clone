@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:whatsapp_clone/const/const_files/my_color.dart';
-import 'package:whatsapp_clone/const/const_widgets/sizedbox.dart';
+import 'package:whatsapp_clone/const_files/my_color.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
+import 'package:whatsapp_clone/view/widgets/sizedBox.dart';
 
 class MessageSendTile extends StatelessWidget {
   const MessageSendTile({

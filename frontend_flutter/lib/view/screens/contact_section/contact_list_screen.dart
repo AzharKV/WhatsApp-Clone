@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:whatsapp_clone/const/const_files/db_names.dart';
-import 'package:whatsapp_clone/const/const_files/my_color.dart';
+import 'package:whatsapp_clone/const_files/db_names.dart';
+import 'package:whatsapp_clone/const_files/my_color.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
 import 'package:whatsapp_clone/controller/user_controller.dart';
 import 'package:whatsapp_clone/database/db_models/db_user_model.dart';

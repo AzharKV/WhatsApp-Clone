@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:whatsapp_clone/const/const_files/my_color.dart';
+import 'package:whatsapp_clone/const_files/my_color.dart';
 
 ThemeData lightTheme = ThemeData.light().copyWith(
     primaryColor: MyColor.primaryColor,

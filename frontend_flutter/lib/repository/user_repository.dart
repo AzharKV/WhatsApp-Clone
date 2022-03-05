@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:whatsapp_clone/const/const_files/api_names.dart';
+import 'package:whatsapp_clone/const_files/api_names.dart';
 import 'package:whatsapp_clone/model/user/user_model.dart';
 import 'package:whatsapp_clone/model/user/users_list_model.dart';
 import 'package:whatsapp_clone/services/http_helper.dart';
