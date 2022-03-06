@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:whatsapp_clone/routes/routes_names.dart';
 import 'package:whatsapp_clone/view/screens/home/home_screen.dart';
+import 'package:whatsapp_clone/view/screens/profile/initial_profile_screen.dart';
+import 'package:whatsapp_clone/view/screens/register_section/phone_enter_screen.dart';
 import 'package:whatsapp_clone/view/screens/register_section/terms_condition_screen.dart';
 
 class AppRoutes {
@@ -9,5 +11,11 @@ class AppRoutes {
     GetPage(
         name: RoutesNames.termsCondition,
         page: () => const TermsConditionScreen()),
+    GetPage(
+        name: RoutesNames.enterNumberScreen,
+        page: () => const PhoneEnterScreen()),
+    GetPage(
+        name: RoutesNames.initialProfileScreen,
+        page: () => const InitialProfileScreen()),
   ];
 }
