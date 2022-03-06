@@ -12,7 +12,7 @@ import 'package:whatsapp_clone/model/user/users_list_model.dart';
 import 'package:whatsapp_clone/repository/user_repository.dart';
 import 'package:whatsapp_clone/utility/utility.dart';
 
-class UserController extends GetxController {
+class UsersController extends GetxController {
   UserRepository userRepository = UserRepository();
 
   Box<DbUserModel> userBox = Hive.box<DbUserModel>(DbNames.user);

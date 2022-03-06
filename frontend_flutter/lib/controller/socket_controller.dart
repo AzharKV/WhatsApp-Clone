@@ -6,7 +6,7 @@ import 'package:whatsapp_clone/const_files/db_names.dart';
 import 'package:whatsapp_clone/const_files/keys/server_keys.dart';
 import 'package:whatsapp_clone/const_files/keys/shared_pref_keys.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
-import 'package:whatsapp_clone/controller/user_controller.dart';
+import 'package:whatsapp_clone/controller/users_controller.dart';
 import 'package:whatsapp_clone/database/db_models/db_chat_list_model.dart';
 import 'package:whatsapp_clone/database/db_models/db_message_model.dart';
 import 'package:whatsapp_clone/model/message/messageModel.dart';
@@ -35,7 +35,7 @@ class SocketController extends GetxController {
 
     socket.onConnect((data) {
       debugPrint("Connected to socket $data");
-      UserController userController = Get.put(UserController());
+      UsersController userController = Get.put(UsersController());
       ChatController chatController = Get.put(ChatController());
       userController.getMyDetails();
       chatController.pendingMessageCheck();

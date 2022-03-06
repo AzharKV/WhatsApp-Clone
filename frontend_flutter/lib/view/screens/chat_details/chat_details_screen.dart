@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
-import 'package:whatsapp_clone/controller/user_controller.dart';
+import 'package:whatsapp_clone/controller/users_controller.dart';
 import 'package:whatsapp_clone/view/screens/chat_details/components/message_list.dart';
 import 'package:whatsapp_clone/view/screens/chat_details/components/message_send_tile.dart';
 import 'package:whatsapp_clone/view/screens/chat_details/widgets/chat_user_header.dart';
@@ -14,7 +14,7 @@ class ChatScreen extends StatelessWidget {
   final String userId, userName;
 
   static ChatController chatController = Get.put(ChatController());
-  static UserController userController = Get.put(UserController());
+  static UsersController userController = Get.put(UsersController());
 
   @override
   Widget build(BuildContext context) {

@@ -6,7 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:whatsapp_clone/const_files/db_names.dart';
 import 'package:whatsapp_clone/controller/socket_controller.dart';
-import 'package:whatsapp_clone/controller/user_controller.dart';
+import 'package:whatsapp_clone/controller/users_controller.dart';
 import 'package:whatsapp_clone/database/db_models/db_chat_list_model.dart';
 import 'package:whatsapp_clone/database/db_models/db_message_model.dart';
 import 'package:whatsapp_clone/database/db_models/db_pending_message_model.dart';
@@ -18,7 +18,7 @@ import 'package:whatsapp_clone/view/screens/chat_details/chat_details_screen.dar
 
 class ChatController extends GetxController {
   SocketController socketController = Get.put(SocketController());
-  UserController userController = Get.put(UserController());
+  UsersController userController = Get.put(UsersController());
 
   UserRepository userRepository = UserRepository();
   ChatRepository chatRepository = ChatRepository();

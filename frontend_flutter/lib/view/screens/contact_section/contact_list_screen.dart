@@ -4,13 +4,13 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:whatsapp_clone/const_files/db_names.dart';
 import 'package:whatsapp_clone/const_files/my_color.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
-import 'package:whatsapp_clone/controller/user_controller.dart';
+import 'package:whatsapp_clone/controller/users_controller.dart';
 import 'package:whatsapp_clone/database/db_models/db_user_model.dart';
 
 class ContactListScreen extends StatelessWidget {
   const ContactListScreen({Key? key}) : super(key: key);
 
-  static UserController userController = Get.put(UserController());
+  static UsersController userController = Get.put(UsersController());
 
   @override
   Widget build(BuildContext context) {

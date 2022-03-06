@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:whatsapp_clone/controller/user_controller.dart';
+import 'package:whatsapp_clone/controller/users_controller.dart';
 import 'package:whatsapp_clone/view/screens/call_section/call_list_screen.dart';
 import 'package:whatsapp_clone/view/screens/camera_section/camera_screen.dart';
 import 'package:whatsapp_clone/view/screens/chat_list/chat_list_screen.dart';
@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
-  UserController userController = Get.put(UserController());
+  UsersController userController = Get.put(UsersController());
 
   double customWidth = (Get.width - 20) / 5;
   double customHeight = 40;
