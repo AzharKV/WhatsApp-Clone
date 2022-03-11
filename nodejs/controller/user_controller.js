@@ -8,7 +8,6 @@ const Message = mongoose.model("Message");
 const PendingMessage = mongoose.model("PendingMessage");
 
 const moment = require("moment");
-const e = require("express");
 
 const onUserConnect = (socket, io) => {
   updateSocketId(socket);
@@ -179,6 +178,38 @@ const getUserDetails = (req, res) => {
   }
 };
 
+const uploadProfileImage = (req, res, next) => {
+  const file = req.file;
+  const serverIp = req.serverIp;
+  const userId = req.user._id;
+
+  const fileName = "images/" + file.filename;
+
+  if (file != undefined) {
+    User.findByIdAndUpdate(userId, {
+      $set: { imagePath: fileName },
+    }).exec((error) => {
+      if (error)
+        return res.json({
+          status: false,
+          message: "Unable to upload image",
+          error,
+        });
+
+      return res.json({
+        status: true,
+        message: "Successfully updated",
+        ImageUrl: serverIp + fileName,
+      });
+    });
+  } else {
+    return res.status(404).json({
+      status: false,
+      message: "file is missing",
+    });
+  }
+};
+
 module.exports = {
   onUserConnect,
   disconnectUser,
@@ -186,4 +217,5 @@ module.exports = {
   userStatus,
   updateUserStatus,
   getUserDetails,
+  uploadProfileImage,
 };

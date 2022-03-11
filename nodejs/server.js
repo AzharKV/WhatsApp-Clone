@@ -1,7 +1,6 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
-const multer = require("multer")();
 
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
@@ -26,13 +25,15 @@ require("./models/message");
 require("./models/pending_message");
 
 app.use(express.json());
-app.use(multer.array());
 
+app.use(express.static("uploads"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //set io to req.io for access from all routes
+//set server ip to access from every where
 app.use((req, res, next) => {
   req.io = io;
+  req.serverIp = "http://192.168.1.77:5678/";
   return next();
 });
 
