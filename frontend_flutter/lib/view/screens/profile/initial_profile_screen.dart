@@ -27,7 +27,7 @@ class InitialProfileScreen extends StatelessWidget {
               style: TextStyle(color: Colors.grey),
               textAlign: TextAlign.center),
           sizedBoxH16,
-          InkWell(
+          GestureDetector(
             onTap: () => profileController.uploadProfileImage(),
             child: Obx(
               () => Container(

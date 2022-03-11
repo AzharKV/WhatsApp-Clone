@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:whatsapp_clone/const_files/my_color.dart';
 import 'package:whatsapp_clone/routes/routes_names.dart';
+import 'package:whatsapp_clone/utility/utility.dart';
 import 'package:whatsapp_clone/view/widgets/common_dialog_box.dart';
 
 class ProfileController extends GetxController {
@@ -32,9 +34,13 @@ class ProfileController extends GetxController {
     // }
   }
 
-  void uploadProfileImage() {
-    // Future<XFile?> imagePicker =
-    //     ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 30);
+  Future<void> uploadProfileImage() async {
+    XFile? imagePicker = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 30);
+
+    if (imagePicker != null) {
+
+    }
   }
 
   void navTOHomeScreen() {
