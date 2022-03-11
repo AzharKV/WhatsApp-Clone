@@ -3,7 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:whatsapp_clone/const_files/db_names.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
 import 'package:whatsapp_clone/controller/users_controller.dart';
-import 'package:whatsapp_clone/database/db_models/db_message_model.dart';
+import 'package:whatsapp_clone/data/db_models/db_message_model.dart';
 import 'package:whatsapp_clone/view/screens/chat_details/widgets/message_tile/message_tile.dart';
 
 class MessageList extends StatelessWidget {

@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:whatsapp_clone/model/user/user_model.dart';
+import 'package:whatsapp_clone/data/model/user/user_model.dart';
 
 UsersListModel usersListModelFromMap(String str) =>
     UsersListModel.fromMap(json.decode(str));

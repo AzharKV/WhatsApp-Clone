@@ -5,10 +5,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:whatsapp_clone/const_files/db_names.dart';
 import 'package:whatsapp_clone/const_files/keys/shared_pref_keys.dart';
-import 'package:whatsapp_clone/database/db_models/db_user_model.dart';
-import 'package:whatsapp_clone/model/user/user_model.dart';
-import 'package:whatsapp_clone/model/user/users_list_model.dart';
-import 'package:whatsapp_clone/repository/user_repository.dart';
+import 'package:whatsapp_clone/data/db_models/db_user_model.dart';
+import 'package:whatsapp_clone/data/model/user/user_model.dart';
+import 'package:whatsapp_clone/data/model/user/users_list_model.dart';
+import 'package:whatsapp_clone/data/repository/user_repository.dart';
 import 'package:whatsapp_clone/utility/utility.dart';
 
 class UsersController extends GetxController {

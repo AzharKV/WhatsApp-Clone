@@ -5,7 +5,7 @@ import 'package:whatsapp_clone/const_files/db_names.dart';
 import 'package:whatsapp_clone/const_files/my_color.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
 import 'package:whatsapp_clone/controller/users_controller.dart';
-import 'package:whatsapp_clone/database/db_models/db_user_model.dart';
+import 'package:whatsapp_clone/data/db_models/db_user_model.dart';
 
 class ContactListScreen extends StatelessWidget {
   const ContactListScreen({Key? key}) : super(key: key);

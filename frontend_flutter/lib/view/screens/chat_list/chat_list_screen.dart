@@ -5,7 +5,7 @@ import 'package:whatsapp_clone/const_files/db_names.dart';
 import 'package:whatsapp_clone/const_files/my_color.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
 import 'package:whatsapp_clone/controller/users_controller.dart';
-import 'package:whatsapp_clone/database/db_models/db_chat_list_model.dart';
+import 'package:whatsapp_clone/data/db_models/db_chat_list_model.dart';
 import 'package:whatsapp_clone/view/screens/contact_section/contact_list_screen.dart';
 import 'package:whatsapp_clone/view/widgets/sizedBox.dart';
 

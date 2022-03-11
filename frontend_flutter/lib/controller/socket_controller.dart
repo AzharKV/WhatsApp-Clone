@@ -6,10 +6,10 @@ import 'package:whatsapp_clone/const_files/keys/server_keys.dart';
 import 'package:whatsapp_clone/const_files/keys/shared_pref_keys.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
 import 'package:whatsapp_clone/controller/users_controller.dart';
-import 'package:whatsapp_clone/database/db_models/db_chat_list_model.dart';
-import 'package:whatsapp_clone/database/db_models/db_message_model.dart';
-import 'package:whatsapp_clone/model/message/messageModel.dart';
-import 'package:whatsapp_clone/repository/chat_repository.dart';
+import 'package:whatsapp_clone/data/db_models/db_chat_list_model.dart';
+import 'package:whatsapp_clone/data/db_models/db_message_model.dart';
+import 'package:whatsapp_clone/data/model/message/messageModel.dart';
+import 'package:whatsapp_clone/data/repository/chat_repository.dart';
 import 'package:whatsapp_clone/services/shared_pref.dart';
 import 'package:whatsapp_clone/utility/utility.dart';
 
@@ -50,7 +50,8 @@ class SocketController extends GetxController {
     //update message opened
     socket.on("messageOpened", messageOpened);
 
-    socket.onConnecting((data) => Utility().customDebugPrint("Connecting to socket $data"));
+    socket.onConnecting(
+        (data) => Utility().customDebugPrint("Connecting to socket $data"));
 
     socket.onError(_connectionError);
     socket.onConnectError(_connectionError);

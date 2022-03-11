@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp_clone/const_files/country_list.dart';
 import 'package:whatsapp_clone/const_files/my_color.dart';
-import 'package:whatsapp_clone/model/county_model.dart';
+import 'package:whatsapp_clone/data/model/county_model.dart';
 import 'package:whatsapp_clone/view/screens/register_section/otp_enter_screen.dart';
 import 'package:whatsapp_clone/view/widgets/common_dialog_box.dart';
 

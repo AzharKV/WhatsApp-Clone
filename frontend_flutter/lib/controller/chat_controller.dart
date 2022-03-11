@@ -7,12 +7,12 @@ import 'package:intl/intl.dart';
 import 'package:whatsapp_clone/const_files/db_names.dart';
 import 'package:whatsapp_clone/controller/socket_controller.dart';
 import 'package:whatsapp_clone/controller/users_controller.dart';
-import 'package:whatsapp_clone/database/db_models/db_chat_list_model.dart';
-import 'package:whatsapp_clone/database/db_models/db_message_model.dart';
-import 'package:whatsapp_clone/database/db_models/db_pending_message_model.dart';
-import 'package:whatsapp_clone/model/message/messageModel.dart';
-import 'package:whatsapp_clone/repository/chat_repository.dart';
-import 'package:whatsapp_clone/repository/user_repository.dart';
+import 'package:whatsapp_clone/data/db_models/db_chat_list_model.dart';
+import 'package:whatsapp_clone/data/db_models/db_message_model.dart';
+import 'package:whatsapp_clone/data/db_models/db_pending_message_model.dart';
+import 'package:whatsapp_clone/data/model/message/messageModel.dart';
+import 'package:whatsapp_clone/data/repository/chat_repository.dart';
+import 'package:whatsapp_clone/data/repository/user_repository.dart';
 import 'package:whatsapp_clone/utility/utility.dart';
 import 'package:whatsapp_clone/view/screens/chat_details/chat_details_screen.dart';
 
