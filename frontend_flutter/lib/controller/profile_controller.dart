@@ -28,7 +28,7 @@ class ProfileController extends GetxController {
     //     Utility.httpResponseValidation(result);
     //   }
     // } catch (e) {
-    //   debugPrint("error getMyDetails $e");
+    //   Utility().customDebugPrint("error getMyDetails $e");
     // }
   }
 

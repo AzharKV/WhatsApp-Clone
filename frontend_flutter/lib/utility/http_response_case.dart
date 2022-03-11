@@ -1,15 +1,9 @@
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:whatsapp_clone/utility/utility.dart';
 
 //http.Response
 dynamic httpResponseCase(http.Response response, String url, String method) {
-  var responseBody = jsonDecode(response.body);
   try {
-    debugPrint(
-        "*Response of url: $url \nmethod: $method code: ${response.statusCode}\nresponse $responseBody*");
-
     switch (response.statusCode) {
       case 200:
         return response;
@@ -18,7 +12,7 @@ dynamic httpResponseCase(http.Response response, String url, String method) {
         return null;
     }
   } catch (e) {
-    debugPrint("Server Error");
+    Utility().customDebugPrint("Server Error");
   }
 
   return response;

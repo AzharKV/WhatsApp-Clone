@@ -1,5 +1,4 @@
 import 'package:contacts_service/contacts_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -43,7 +42,7 @@ class UsersController extends GetxController {
         Utility.httpResponseValidation(result);
       }
     } catch (e) {
-      debugPrint("error getMyDetails $e");
+      Utility().customDebugPrint("error getMyDetails $e");
     }
   }
 
@@ -58,7 +57,7 @@ class UsersController extends GetxController {
         Utility.httpResponseValidation(result);
       }
     } catch (e) {
-      debugPrint("error usersList $e");
+      Utility().customDebugPrint("error usersList $e");
     }
   }
 

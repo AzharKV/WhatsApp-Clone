@@ -63,7 +63,7 @@ class ChatController extends GetxController {
       } else
         Utility.httpResponseValidation(result);
     } catch (e) {
-      debugPrint("error usersList $e");
+      Utility().customDebugPrint("error usersList $e");
     }
 
     try {
@@ -72,7 +72,7 @@ class ChatController extends GetxController {
       socketController.socket
           .on(eventString, (data) => userStatus.value = data ?? false);
     } catch (e) {
-      debugPrint("status socket error $e");
+      Utility().customDebugPrint("status socket error $e");
     }
   }
 

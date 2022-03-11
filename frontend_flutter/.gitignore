@@ -34,6 +34,9 @@
 # Web related
 lib/generated_plugin_registrant.dart
 
+# firebase keys
+lib/firebase_options.dart
+
 # Symbolication related
 app.*.symbols
 
