@@ -94,19 +94,18 @@ class HttpHelper {
     return null;
   }
 
-  Future<dynamic> multipart(String path, String url, dynamic body,
-      {bool auth = false}) async {
+  Future<dynamic> multipart(String fieldName, String path, String url,
+      {bool auth = true}) async {
     Map<String, String>? hd = await _httpHeader(auth);
 
-    Utility().customDebugPrint(
-        "requesting for multipart $url \nheader $hd \nbody $body");
+    Utility().customDebugPrint("requesting for multipart $url \nheader $hd");
 
     late dynamic responseJson;
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.headers.addAll(hd);
       request.files.add(http.MultipartFile.fromBytes(
-        'files',
+        fieldName,
         File(path).readAsBytesSync(),
         filename: path.split("/").last,
       ));
@@ -114,7 +113,7 @@ class HttpHelper {
       var response = await http.Response.fromStream(res);
 
       Utility().customDebugPrint(
-          "multiple url: $url \nheader: ${hd.toString()} \nbody: $body \nstatusCode: ${response.statusCode} \nresponse ${response.body} ");
+          "multiple url: $url \nheader: ${hd.toString()} \nstatusCode: ${response.statusCode} \nresponse ${response.body} ");
 
       responseJson = _returnResponse(response);
     } on SocketException {
