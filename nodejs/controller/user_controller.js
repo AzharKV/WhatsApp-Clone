@@ -183,11 +183,11 @@ const uploadProfileImage = (req, res, next) => {
   const serverIp = req.serverIp;
   const userId = req.user._id;
 
-  const fileName = "images/" + file.filename;
+  const fileName = file.filename;
 
   if (file != undefined) {
     User.findByIdAndUpdate(userId, {
-      $set: { imagePath: fileName },
+      $set: { imageName: fileName },
     }).exec((error) => {
       if (error)
         return res.json({
