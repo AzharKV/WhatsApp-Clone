@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:whatsapp_clone/const_files/my_color.dart';
 import 'package:whatsapp_clone/routes/routes_names.dart';
+import 'package:whatsapp_clone/utility/utility.dart';
 import 'package:whatsapp_clone/view/widgets/common_dialog_box.dart';
 
 class ProfileController extends GetxController {
@@ -38,8 +39,6 @@ class ProfileController extends GetxController {
         .pickImage(source: ImageSource.gallery, imageQuality: 30);
 
     if (imagePicker != null) {
-      // await HttpHelper()
-      //     .multipart("image", imagePicker.path, Api.uploadProfileImage);
 
     }
   }

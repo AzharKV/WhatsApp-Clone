@@ -52,6 +52,6 @@ class MyApp extends StatelessWidget {
     //return RoutesNames.termsCondition;
 
     //
-    return RoutesNames.termsCondition;
+    return RoutesNames.initialProfileScreen;
   }
 }
