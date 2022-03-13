@@ -5,9 +5,17 @@ const moment = require("moment");
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
+    required: false,
+  },
+  phoneNumber: {
+    type: String,
     required: true,
   },
-  phone: {
+  phoneWithDialCode: {
+    type: String,
+    required: true,
+  },
+  dialCode: {
     type: String,
     required: true,
   },
@@ -17,7 +25,7 @@ const userSchema = new mongoose.Schema({
   },
   about: {
     type: String,
-    required: true,
+    required: false,
   },
   lastSeen: { type: Date, default: moment().format(), required: false },
   status: {

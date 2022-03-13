@@ -150,12 +150,12 @@ const getUserDetails = (req, res) => {
   const phoneNumber = req.params.phone;
 
   if (phoneNumber.length > 5) {
-    User.findOne({ phone: phoneNumber }, (error, data) => {
+    User.findOne({ phoneNumber: phoneNumber }, (error, data) => {
       if (data != null) {
         const result = {
           id: data._id,
           name: data.name,
-          phone: data.phone,
+          phoneNumber: data.phoneNumber,
           imageUrl: data.imageUrl,
           about: data.about,
           createdAt: moment().format(),
