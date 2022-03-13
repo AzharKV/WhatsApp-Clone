@@ -1,16 +1,27 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp_clone/const_files/country_list.dart';
-import 'package:whatsapp_clone/const_files/my_color.dart';
+import 'package:whatsapp_clone/const_files/keys/shared_pref_keys.dart';
 import 'package:whatsapp_clone/data/model/county_model.dart';
+import 'package:whatsapp_clone/data/model/user_login_registration_model.dart';
+import 'package:whatsapp_clone/data/repository/user_repository.dart';
+import 'package:whatsapp_clone/routes/routes_names.dart';
+import 'package:whatsapp_clone/services/shared_pref.dart';
+import 'package:whatsapp_clone/utility/utility.dart';
 import 'package:whatsapp_clone/view/screens/register_section/otp_enter_screen.dart';
 import 'package:whatsapp_clone/view/widgets/common_dialog_box.dart';
 
 class RegisterController extends GetxController {
   static CountryModel countryModel = CountryModel.fromMap(countryListData);
 
+  FirebaseAuth auth = FirebaseAuth.instance;
+
+  CommonDialogBoxes commonDialogBoxes = CommonDialogBoxes();
+
   TextEditingController dialCode = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
+  TextEditingController smsCode = TextEditingController();
 
   RxString otpValue = "".obs;
 
@@ -22,6 +33,8 @@ class RegisterController extends GetxController {
           code: countryModel.data[0].code,
           dialCode: countryModel.data[0].dialCode)
       .obs;
+
+  late String codeVerificationId;
 
   @override
   void onInit() {
@@ -49,42 +62,72 @@ class RegisterController extends GetxController {
 
   Future<void> navToOtpScreen() async {
     if (isInvalidCode.value) {
-      CommonDialogBoxes().customDialog(
-        title: "Invalid country code",
-        action: [
-          TextButton(
-            onPressed: Get.back,
-            child: const Text(
-              "OK",
-              style: TextStyle(color: MyColor.buttonColor),
-            ),
-          ),
-        ],
-      );
+      commonDialogBoxes.customDialog(
+          title: "Invalid country code", getBackOK: true);
     } else if (phoneNumber.text.isEmpty) {
-      CommonDialogBoxes().customDialog(
-        title: "Please enter your phone number",
-        action: [
-          TextButton(
-            onPressed: Get.back,
-            child: const Text(
-              "OK",
-              style: TextStyle(color: MyColor.buttonColor),
-            ),
-          ),
-        ],
-      );
+      commonDialogBoxes.customDialog(
+          title: "Please enter your phone number", getBackOK: true);
     } else {
-      CommonDialogBoxes().loadingDialog();
+      commonDialogBoxes.loadingDialog();
 
-      await Future.delayed(const Duration(seconds: 2));
-
-      Get.to(() => OTPEnterScreen(
-          phoneNumber: phoneNumber.text, dialCode: dialCode.text));
+      await phoneAuth();
     }
   }
 
-  void verifyOTP() {
-    CommonDialogBoxes().loadingDialog();
+  Future<void> phoneAuth() async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: '+${dialCode.text}${phoneNumber.text}',
+      timeout: const Duration(seconds: 60),
+      verificationCompleted: (PhoneAuthCredential credential) async =>
+          await auth.signInWithCredential(credential),
+      verificationFailed: (FirebaseAuthException e) {},
+      codeSent: (String verificationId, int? resendToken) {
+        codeVerificationId = verificationId;
+        Get.to(() => OTPEnterScreen(
+            phoneNumber: phoneNumber.text, dialCode: dialCode.text));
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+
+  Future<void> verifyOTP() async {
+    commonDialogBoxes.loadingDialog();
+
+    if (codeVerificationId.isEmpty) {
+      commonDialogBoxes.customDialog(
+          title: "Something wrong..\nTry again", getBackOK: true);
+    } else if (smsCode.text.length != 6) {
+      commonDialogBoxes.customDialog(
+          title: "Please enter 6 digit code", getBackOK: true);
+    } else {
+      try {
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+            verificationId: codeVerificationId, smsCode: smsCode.text);
+
+        await auth.signInWithCredential(credential);
+
+        await loginTOServer();
+      } catch (e) {
+        Utility().customDebugPrint("verification failed $e");
+      }
+    }
+  }
+
+  Future<void> loginTOServer() async {
+    UserRepository userRepository = UserRepository();
+
+    SharedPref sharedPref = SharedPref();
+
+    dynamic result = await userRepository.userLoginRegistration(
+        phoneNumber.text, dialCode.text);
+
+    if (result.runtimeType.toString() == "UserLoginRegistrationModel") {
+      UserLoginRegistrationModel userData = result;
+
+      await sharedPref.saveString(
+          SharedPrefKeys.authToken, userData.token ?? "");
+
+      Get.offAllNamed(RoutesNames.initialProfileScreen);
+    }
   }
 }

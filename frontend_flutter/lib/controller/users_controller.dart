@@ -37,7 +37,7 @@ class UsersController extends GetxController {
 
         preferences.setString(SharedPrefKeys.userId, userId.value);
         preferences.setString(
-            SharedPrefKeys.userDetails, data.toMap().toString());
+            SharedPrefKeys.userDetails, data.toJson().toString());
       } else {
         Utility.httpResponseValidation(result);
       }
@@ -110,8 +110,8 @@ class UsersController extends GetxController {
       DbUserModel dbUserModel = DbUserModel(
         name: name,
         id: userData.id ?? "",
-        imagePath: userData.imageUrl ?? "",
-        phone: userData.phone ?? "",
+        imagePath: userData.imageName ?? "",
+        phone: userData.phoneWithDialCode ?? "",
         about: userData.about ?? "",
       );
 

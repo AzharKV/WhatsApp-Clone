@@ -7,22 +7,24 @@ import 'package:whatsapp_clone/services/shared_pref.dart';
 import 'package:whatsapp_clone/utility/utility.dart';
 
 class HttpHelper {
+  final Utility _utility = Utility();
+
   Future<dynamic> get(String url, {bool auth = true}) async {
     Map<String, String> header = await _httpHeader(auth);
 
-    Utility().customDebugPrint("requesting for get $url header $header");
+    _utility.customDebugPrint("requesting for get $url header $header");
 
     try {
       var response = await http.get(Uri.parse(url), headers: header);
 
-      Utility().customDebugPrint(
+      _utility.customDebugPrint(
           "url: $url \nheader: ${header.toString()} \nstatusCode: ${response.statusCode} \nresponse ${response.body} ");
 
       return _returnResponse(response);
     } on SocketException {
       throw FetchDataException("No Internet");
     } catch (e) {
-      Utility().customDebugPrint("http catch get $e");
+      _utility.customDebugPrint("http catch get $e");
     }
 
     return null;
@@ -31,21 +33,21 @@ class HttpHelper {
   Future<dynamic> post(String url, dynamic body, {bool auth = true}) async {
     Map<String, String>? header = await _httpHeader(auth);
 
-    Utility().customDebugPrint(
+    _utility.customDebugPrint(
         "requesting for post $url \nheader $header \nbody $body");
 
     try {
       var response =
           await http.post(Uri.parse(url), body: body, headers: header);
 
-      Utility().customDebugPrint(
+      _utility.customDebugPrint(
           "post url: $url \nheader: $header \nbody: $body \nstatusCode: ${response.statusCode} \nresponse ${response.body} ");
 
       return _returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
     } catch (e) {
-      Utility().customDebugPrint("http catch post $e");
+      _utility.customDebugPrint("http catch post $e");
     }
     return null;
   }
@@ -53,21 +55,21 @@ class HttpHelper {
   Future<dynamic> put(String url, dynamic body, {bool auth = true}) async {
     Map<String, String>? header = await _httpHeader(auth);
 
-    Utility().customDebugPrint(
+    _utility.customDebugPrint(
         "requesting for put $url \nheader $header \nbody $body");
 
     try {
       var response =
           await http.put(Uri.parse(url), body: body, headers: header);
 
-      Utility().customDebugPrint(
+      _utility.customDebugPrint(
           "put url: $url \nheader: $header \nbody: $body \nstatusCode: ${response.statusCode} \nresponse ${response.body} ");
 
       return _returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
     } catch (e) {
-      Utility().customDebugPrint("http catch put $e");
+      _utility.customDebugPrint("http catch put $e");
     }
 
     return null;
@@ -76,49 +78,51 @@ class HttpHelper {
   Future<dynamic> delete(String url, {bool auth = true}) async {
     Map<String, String>? header = await _httpHeader(auth);
 
-    Utility().customDebugPrint("requesting for delete $url header $header");
+    _utility.customDebugPrint("requesting for delete $url header $header");
 
     try {
       var response = await http.delete(Uri.parse(url), headers: header);
 
-      Utility().customDebugPrint(
+      _utility.customDebugPrint(
           "delete url: $url \nheader: $header  \nstatusCode: ${response.statusCode} \nresponse ${response.body} ");
 
       return _returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
     } catch (e) {
-      Utility().customDebugPrint("http catch delete $e");
+      _utility.customDebugPrint("http catch delete $e");
     }
 
     return null;
   }
 
-  Future<dynamic> multipart(String path, String url, dynamic body,
-      {bool auth = false}) async {
+  Future<dynamic> multipart(
+      {required String url,
+      required String path,
+      required String fieldName,
+      bool auth = true}) async {
     Map<String, String>? hd = await _httpHeader(auth);
 
-    Utility().customDebugPrint(
-        "requesting for multipart $url \nheader $hd \nbody $body");
+    _utility.customDebugPrint("requesting for multipart $url \nheader $hd");
 
     late dynamic responseJson;
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.headers.addAll(hd);
       request.files.add(http.MultipartFile.fromBytes(
-        'files',
+        fieldName,
         File(path).readAsBytesSync(),
         filename: path.split("/").last,
       ));
       var res = await request.send();
       var response = await http.Response.fromStream(res);
 
-      Utility().customDebugPrint(
-          "multiple url: $url \nheader: ${hd.toString()} \nbody: $body \nstatusCode: ${response.statusCode} \nresponse ${response.body} ");
+      _utility.customDebugPrint(
+          "multiple url: $url \nheader: ${hd.toString()} \nstatusCode: ${response.statusCode} \nresponse ${response.body} ");
 
       responseJson = _returnResponse(response);
     } on SocketException {
-      Utility().customDebugPrint('No net');
+      _utility.customDebugPrint('No net');
       throw FetchDataException('No Internet connection');
     }
 
@@ -150,7 +154,7 @@ class HttpHelper {
           return null;
       }
     } catch (e) {
-      Utility().customDebugPrint("Server Error");
+      _utility.customDebugPrint("Server Error");
     }
   }
 }

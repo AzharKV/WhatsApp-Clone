@@ -33,20 +33,21 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.4
   socket_io_client: ^2.0.0-beta.4-nullsafety.0
   get: ^4.6.1
   intl: ^0.17.0
-  shared_preferences: ^2.0.11
+  shared_preferences: ^2.0.13
   http: ^0.13.4
-  hive: ^2.0.5
+  hive: ^2.0.6
   hive_flutter: ^1.1.0
   hive_generator: ^1.1.2
   build_runner: ^2.1.7
   contacts_service: ^0.6.3
-  permission_handler: ^9.1.0
-  image_picker: ^0.8.4+10
+  permission_handler: ^9.2.0
+  image_picker: ^0.8.4+11
   firebase_core: ^1.13.1
+  firebase_auth: ^3.3.10
 
 dev_dependencies:
   flutter_test:
@@ -57,7 +58,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+  flutter_lints: ^1.0.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

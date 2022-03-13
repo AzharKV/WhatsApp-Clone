@@ -23,11 +23,11 @@ class UsersListModel {
   factory UsersListModel.fromMap(Map<String, dynamic> json) => UsersListModel(
         createdAt: DateTime.parse(json["createdAt"]),
         users: List<UserModel>.from(
-            json["users"].map((x) => UserModel.fromMap(x))),
+            json["users"].map((x) => UserModel.fromJson(x))),
       );
 
   Map<String, dynamic> toMap() => {
         "createdAt": createdAt?.toIso8601String(),
-        "users": List<dynamic>.from(users!.map((x) => x.toMap())),
+        "users": List<dynamic>.from(users!.map((x) => x.toJson())),
       };
 }

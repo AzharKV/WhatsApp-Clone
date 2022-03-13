@@ -10,4 +10,8 @@ class Api {
   static const String openedMessageUpdate =
       ServerKeys.baseurl + "openedMessageUpdate";
   static const String userDetails = ServerKeys.baseurl + "user/";
+  static const String profileImage = ServerKeys.baseurl + "profileImage";
+  static const String userName = ServerKeys.baseurl + "userName";
+  static const String userRegistration =
+      ServerKeys.baseurl + "userRegistration";
 }

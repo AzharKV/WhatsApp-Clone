@@ -4,14 +4,26 @@ import 'package:whatsapp_clone/const_files/my_color.dart';
 import 'package:whatsapp_clone/view/widgets/sizedBox.dart';
 
 class CommonDialogBoxes {
-  void customDialog({required String title, required List<Widget> action}) {
+  void customDialog({
+    required String title,
+    List<Widget>? action,
+    bool getBackOK = false,
+  }) {
     Get.dialog(
       AlertDialog(
         title: Text(
           title,
           style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
         ),
-        actions: action,
+        actions: [
+          if (action != null) ...action,
+          if (getBackOK)
+            TextButton(
+              onPressed: Get.back,
+              child: const Text("OK",
+                  style: TextStyle(color: MyColor.buttonColor)),
+            )
+        ],
       ),
     );
   }

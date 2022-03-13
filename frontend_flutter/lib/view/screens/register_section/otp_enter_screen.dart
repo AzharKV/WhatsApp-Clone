@@ -59,6 +59,7 @@ class OTPEnterScreen extends StatelessWidget {
           SizedBox(
             width: Get.width / 1.75,
             child: TextField(
+              controller: registerController.smsCode,
               keyboardType: TextInputType.number,
               maxLength: 6,
               textAlignVertical: TextAlignVertical.bottom,
