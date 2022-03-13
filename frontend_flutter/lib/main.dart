@@ -2,13 +2,19 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp_clone/const_files/keys/shared_pref_keys.dart';
 import 'package:whatsapp_clone/const_files/my_color.dart';
 import 'package:whatsapp_clone/controller/socket_controller.dart';
 import 'package:whatsapp_clone/firebase_options.dart';
 import 'package:whatsapp_clone/routes/app_routes.dart';
 import 'package:whatsapp_clone/routes/routes_names.dart';
 import 'package:whatsapp_clone/services/database_helper.dart';
+import 'package:whatsapp_clone/services/shared_pref.dart';
+import 'package:whatsapp_clone/view/screens/home/home_screen.dart';
+import 'package:whatsapp_clone/view/screens/register_section/terms_condition_screen.dart';
 import 'package:whatsapp_clone/view/theme/light_theme.dart';
+import 'package:whatsapp_clone/view/widgets/common_appbar.dart';
+import 'package:whatsapp_clone/view/widgets/common_scaffold.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,11 +37,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'whatsapp_clone',
+      title: 'WhatsAppClone',
       theme: lightTheme,
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.downToUp,
-      initialRoute: initialRoute(),
+      initialRoute: RoutesNames.indexPage,
       getPages: AppRoutes.routes,
       // onInit: () {
       //   SharedPref().saveString(SharedPrefKeys.authToken,
@@ -44,14 +50,39 @@ class MyApp extends StatelessWidget {
       // onReady: () => socketController.connectToSocket(),
     );
   }
+}
 
-  String initialRoute() {
-    //if saved user home
-    // return RoutesNames.home;
-    //else termsCondition accept screen
-    //return RoutesNames.termsCondition;
+class IndexPage extends StatefulWidget {
+  const IndexPage({Key? key}) : super(key: key);
 
-    //
-    return RoutesNames.initialProfileScreen;
+  @override
+  State<IndexPage> createState() => _IndexPageState();
+}
+
+class _IndexPageState extends State<IndexPage> {
+  Widget? mainWidget;
+
+  @override
+  void initState() {
+    initialCheckUp();
+    super.initState();
+  }
+
+  Future<void> initialCheckUp() async {
+    String authToken = await SharedPref().readString(SharedPrefKeys.authToken);
+
+    if (authToken.isEmpty)
+      mainWidget = const TermsConditionScreen();
+    else
+      mainWidget = const HomeScreen();
+
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return mainWidget ??
+        const CommonScaffold(
+            appBar: CommonAppBar(whiteBackground: true), body: SizedBox());
   }
 }
