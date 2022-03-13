@@ -129,20 +129,29 @@ const updateUserStatus = (req, res) => {
   User.findByIdAndUpdate(userId, {
     $set: updateData,
   }).exec((error) => {
-    if (error) return console.log(error);
+    if (error) {
+      console.log(req.url, " ", req.method, " ", error);
+      return res.status(400).json({
+        status: false,
+        message: "unable to update",
+      });
+    } else {
+      let eventString = "/user_status" + userId;
 
-    let eventString = "/user_status" + userId;
+      let userStatus = false;
 
-    let userStatus = false;
+      if (status == "true") userStatus = true;
 
-    if (status == "true") userStatus = true;
+      io.emit(eventString, userStatus);
 
-    io.emit(eventString, userStatus);
+      const resultData = {
+        status: true,
+        message: "Successfully updated",
+      };
+      console.log(req.url, " ", req.method, " ", resultData);
 
-    return res.json({
-      status: true,
-      message: "Successfully updated",
-    });
+      return res.json(resultData);
+    }
   });
 };
 
@@ -187,27 +196,72 @@ const uploadProfileImage = (req, res, next) => {
 
   if (file != undefined) {
     User.findByIdAndUpdate(userId, {
-      $set: { imageName: fileName },
+      $set: { image: fileName },
     }).exec((error) => {
-      if (error)
-        return res.json({
+      if (error) {
+        const result = {
           status: false,
           message: "Unable to upload image",
           error,
-        });
+        };
 
-      return res.json({
-        status: true,
-        message: "Successfully updated",
-        ImageUrl: serverIp + fileName,
-      });
+        console.log(req.url, " ", req.method, "", result, error);
+
+        return res.json(result);
+      } else {
+        const result = {
+          status: true,
+          message: "Successfully updated",
+          ImageUrl: serverIp + fileName,
+        };
+
+        console.log(req.url, " ", req.method, "", result);
+
+        return res.json(result);
+      }
     });
   } else {
-    return res.status(404).json({
+    const result = {
       status: false,
       message: "file is missing",
-    });
+    };
+
+    console.log(req.url, " ", req.method, "", result);
+
+    return res.status(404).json(result);
   }
+};
+
+const userNameUpdate = (req, res) => {
+  const { name } = req.body;
+  const userId = req.user._id;
+
+  let updateData = { name: name };
+
+  User.findByIdAndUpdate(userId, {
+    $set: updateData,
+  }).exec((error) => {
+    if (error) {
+      const result = {
+        status: false,
+        message: "Unable to update user name",
+      };
+
+      console.log(req.url, " ", req.method, "", result, error);
+
+      return res.json(result);
+    } else {
+      const result = {
+        status: true,
+        message: "User name update successfully",
+        name,
+      };
+
+      console.log(req.url, " ", req.method, "", result);
+
+      return res.json(result);
+    }
+  });
 };
 
 module.exports = {
@@ -216,6 +270,7 @@ module.exports = {
   getUsers,
   userStatus,
   updateUserStatus,
+  userNameUpdate,
   getUserDetails,
   uploadProfileImage,
 };

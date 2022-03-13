@@ -8,15 +8,13 @@ const key = require("../key");
 const moment = require("moment");
 
 const createUser = (req, res) => {
-  const { name, imageUrl, status, lastSeen, about, phoneNumber, dialCode } =
-    req.body;
+  const { name, phoneNumber, dialCode } = req.body;
 
   let errorMap = {};
 
-  if (!name || !about || !phoneNumber) {
+  if (!name || !dialCode || !phoneNumber) {
     errorMap.error = "Please input all fields";
     if (!name) errorMap.name = "name is required";
-    if (!about) errorMap.about = "about is required";
     if (!dialCode) errorMap.about = "dial code is required";
     if (!phoneNumber) errorMap.phoneNumber = "phoneNumber is required";
     console.log(req.url, " ", req.method, "", errorMap);
@@ -43,12 +41,8 @@ const createUser = (req, res) => {
 
       const user = new User({
         name,
-        imageUrl,
-        status,
-        lastSeen,
-        about,
         phoneNumber,
-        phoneWithDialCode: dialCode + phone,
+        phoneWithDialCode: "+" + dialCode + phoneNumber,
         dialCode,
       });
 
@@ -56,7 +50,7 @@ const createUser = (req, res) => {
         const token = jwt.sign({ _id: user._id }, key.JWT_SECRET);
 
         const result = {
-          message: "Saved Successfully",
+          message: "Created Successfully",
           token,
           user,
           createdAt: moment().format(),
@@ -73,9 +67,9 @@ const myDetails = (req, res) => {
   const result = {
     id: req.user._id,
     name: req.user.name,
-    imageUrl: req.user.imageUrl,
     phoneNumber: req.user.phoneNumber,
     phoneWithDialCode: req.user.phoneWithDialCode,
+    image: req.serverIp + req.user.image,
     dialCode: req.user.dialCode,
     about: req.user.about,
     createdAt: moment().format(),
@@ -99,9 +93,7 @@ const userRegistration = (req, res) => {
     console.log(req.url, " ", req.method, "", errorMap);
     return res.status(422).json(errorMap);
   } else {
-    const phoneWithDialCode = dialCode + phoneNumber;
-
-    console.log("user number ", phoneWithDialCode);
+    const phoneWithDialCode = "+" + dialCode + phoneNumber;
 
     User.findOne({ phoneWithDialCode: phoneWithDialCode })
       .select("-__v")
