@@ -64,12 +64,15 @@ const createUser = (req, res) => {
 };
 
 const myDetails = (req, res) => {
+  let imageUrl = "";
+  if (req.user.image != undefined) imageUrl = req.serverIp + req.user.image;
+
   const result = {
     id: req.user._id,
     name: req.user.name,
     phoneNumber: req.user.phoneNumber,
     phoneWithDialCode: req.user.phoneWithDialCode,
-    image: req.serverIp + req.user.image,
+    image: imageUrl,
     dialCode: req.user.dialCode,
     about: req.user.about,
     createdAt: moment().format(),

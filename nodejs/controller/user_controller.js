@@ -159,7 +159,7 @@ const getUserDetails = (req, res) => {
   const phoneNumber = req.params.phone;
 
   if (phoneNumber.length > 5) {
-    User.findOne({ phoneNumber: phoneNumber }, (error, data) => {
+    User.findOne({ phoneWithDialCode: phoneNumber }, (error, data) => {
       if (data != null) {
         const result = {
           id: data._id,
