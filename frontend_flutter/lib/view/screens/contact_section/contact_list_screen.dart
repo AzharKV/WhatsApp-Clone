@@ -48,9 +48,7 @@ class ContactListScreen extends StatelessWidget {
                           child: const Text("Contacts"), onTap: () {}),
                       PopupMenuItem(
                           child: const Text("Refresh"),
-                          onTap: () {
-                            userController.updateContactDb();
-                          }),
+                          onTap: () => userController.updateContactDb()),
                       PopupMenuItem(child: const Text("Help"), onTap: () {}),
                     ],
                   ),
@@ -118,7 +116,7 @@ class ContactListScreen extends StatelessWidget {
                     ),
                   ],
                 );
-              else if (index == 4)
+              else if (index == data.length - 1)
                 return Column(
                   children: [
                     ListTile(

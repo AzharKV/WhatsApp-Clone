@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp_clone/controller/socket_controller.dart';
 import 'package:whatsapp_clone/controller/users_controller.dart';
 import 'package:whatsapp_clone/view/screens/call_section/call_list_screen.dart';
 import 'package:whatsapp_clone/view/screens/camera_section/camera_screen.dart';
@@ -14,6 +15,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+  static SocketController socketController =
+      Get.put(SocketController(), permanent: true);
   UsersController userController = Get.put(UsersController());
 
   double customWidth = (Get.width - 20) / 5;
@@ -22,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance?.addObserver(this);
+    socketController.connectToSocket();
 
     super.initState();
   }

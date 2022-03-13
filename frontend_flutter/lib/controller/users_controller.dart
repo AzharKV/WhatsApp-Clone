@@ -46,21 +46,6 @@ class UsersController extends GetxController {
     }
   }
 
-  Future<void> usersList() async {
-    var result = await userRepository.getUsersList();
-
-    try {
-      if (result.runtimeType.toString() == 'UsersListModel') {
-        UsersListModel data = result;
-        usersListData.value = data;
-      } else {
-        Utility.httpResponseValidation(result);
-      }
-    } catch (e) {
-      Utility().customDebugPrint("error usersList $e");
-    }
-  }
-
   void updateUserStatus(bool status) {
     userRepository.updateUserStatus(status);
   }
@@ -115,7 +100,7 @@ class UsersController extends GetxController {
         about: userData.about ?? "",
       );
 
-      userBox.put(userData.id!, dbUserModel);
+      await userBox.put(userData.id!, dbUserModel);
     }
   }
 
