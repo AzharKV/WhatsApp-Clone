@@ -30,6 +30,9 @@ router.get("/userStatus/:id", auth, controller.userStatus);
 //update user status
 router.put("/userStatus", auth, controller.updateUserStatus);
 
+//update user name
+router.put("/userName", auth, controller.userNameUpdate);
+
 //profile image upload
 router.post(
   "/profileImage",
