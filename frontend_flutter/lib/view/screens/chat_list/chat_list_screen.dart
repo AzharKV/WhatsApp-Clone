@@ -23,18 +23,17 @@ class ChatListScreen extends StatelessWidget {
             Hive.box<DbChatListModel>(DbNames.chatList).listenable(),
         builder:
             (BuildContext context, Box<DbChatListModel> value, Widget? child) {
-          value.values
-              .toList()
-              .sort((a, b) => a.createdAt.compareTo(b.createdAt));
+          List<DbChatListModel> data = value.values.toList();
+          data.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-          return value.values.toList().isEmpty
+          return data.toList().isEmpty
               ? const Center(child: Text('No Chats'))
               : ListView.builder(
-                  itemCount: value.values.toList().length,
+                  itemCount: data.length,
                   padding: const EdgeInsets.only(
                       left: 8.0, right: 4.0, top: 8.0, bottom: 8.0),
                   itemBuilder: (BuildContext context, int index) {
-                    DbChatListModel userChat = value.values.toList()[index];
+                    DbChatListModel userChat = data[index];
 
                     String date =
                         chatController.timerConverter(userChat.createdAt);

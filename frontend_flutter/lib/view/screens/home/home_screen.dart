@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp_clone/const_files/my_color.dart';
 import 'package:whatsapp_clone/controller/socket_controller.dart';
 import 'package:whatsapp_clone/controller/users_controller.dart';
 import 'package:whatsapp_clone/view/screens/call_section/call_list_screen.dart';
@@ -54,6 +56,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           ],
           toolbarHeight: 48.0,
           elevation: 0.0,
+          systemOverlayStyle:
+              const SystemUiOverlayStyle(statusBarColor: MyColor.primaryColor),
           bottom: TabBar(
             isScrollable: true,
             indicatorColor: Colors.white,
