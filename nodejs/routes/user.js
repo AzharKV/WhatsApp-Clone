@@ -10,7 +10,10 @@ const path = require("path");
 const storage = multer.diskStorage({
   destination: "uploads/",
   filename: (req, file, cb) => {
-    cb(null, "PLIMG" + Date.now() + path.extname(file.originalname));
+    // const newFileName = req.user._id;
+    const newFileName = Date.now();
+
+    cb(null, "PLIMG" + newFileName + path.extname(file.originalname));
   },
 });
 
@@ -22,7 +25,10 @@ const upload = multer({
 router.get("/getUsers", auth, controller.getUsers);
 
 //get user details
-router.get("/user/:phone", auth, controller.getUserDetails);
+router.get("/user/:phone", auth, controller.getUserDetailsByPhoneNumber);
+
+//get user details by id
+router.get("/userById/:id", auth, controller.getUserDetailsById);
 
 //get user status
 router.get("/userStatus/:id", auth, controller.userStatus);

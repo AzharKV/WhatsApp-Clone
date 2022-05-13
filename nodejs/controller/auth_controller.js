@@ -64,7 +64,7 @@ const createUser = (req, res) => {
 };
 
 const myDetails = (req, res) => {
-  let imageUrl = "";
+  let imageUrl;
   if (req.user.image != undefined) imageUrl = req.serverIp + req.user.image;
 
   const result = {

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 require("../models/user");
 require("../models/message");
 require("../models/pending_message");
+fs = require("fs");
 
 const User = mongoose.model("User");
 const Message = mongoose.model("Message");
@@ -155,17 +156,19 @@ const updateUserStatus = (req, res) => {
   });
 };
 
-const getUserDetails = (req, res) => {
+const getUserDetailsByPhoneNumber = (req, res) => {
   const phoneNumber = req.params.phone;
 
   if (phoneNumber.length > 5) {
     User.findOne({ phoneWithDialCode: phoneNumber }, (error, data) => {
       if (data != null) {
+        let imageUrl;
+        if (data.image != undefined) imageUrl = req.serverIp + data.image;
         const result = {
           id: data._id,
           name: data.name,
           phoneNumber: data.phoneNumber,
-          imageUrl: data.imageUrl,
+          image: imageUrl,
           about: data.about,
           createdAt: moment().format(),
         };
@@ -185,6 +188,33 @@ const getUserDetails = (req, res) => {
     console.log(req.url, " ", req.method, " ", result);
     return res.status(400).json(result);
   }
+};
+
+const getUserDetailsById = (req, res) => {
+  const id = req.params.id;
+
+  User.findOne({ _id: id }, (error, data) => {
+    if (data != null) {
+      let imageUrl;
+      if (data.image != undefined) imageUrl = req.serverIp + data.image;
+      const result = {
+        id: data._id,
+        name: data.name,
+        phoneNumber: data.phoneNumber,
+        image: imageUrl,
+        about: data.about,
+        createdAt: moment().format(),
+      };
+
+      console.log(req.url, " ", req.method, " ", result);
+      return res.json(result);
+    } else {
+      const result = { status: false, message: "User not found" };
+
+      console.log(req.url, " ", req.method, " ", result);
+      return res.status(404).json(result);
+    }
+  });
 };
 
 const uploadProfileImage = (req, res, next) => {
@@ -271,6 +301,7 @@ module.exports = {
   userStatus,
   updateUserStatus,
   userNameUpdate,
-  getUserDetails,
+  getUserDetailsByPhoneNumber,
+  getUserDetailsById,
   uploadProfileImage,
 };
