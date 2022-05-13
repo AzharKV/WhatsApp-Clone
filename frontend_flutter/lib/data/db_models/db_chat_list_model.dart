@@ -28,6 +28,9 @@ class DbChatListModel {
   @HiveField(7)
   int unreadCount;
 
+  @HiveField(8)
+  String profileImage;
+
   DbChatListModel({
     required this.message,
     required this.createdAt,
@@ -37,5 +40,6 @@ class DbChatListModel {
     required this.userId,
     required this.unreadCount,
     this.tickCount = 0,
+    this.profileImage = "",
   });
 }

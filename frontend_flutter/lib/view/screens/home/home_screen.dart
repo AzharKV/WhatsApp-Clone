@@ -7,6 +7,7 @@ import 'package:whatsapp_clone/controller/users_controller.dart';
 import 'package:whatsapp_clone/view/screens/call_section/call_list_screen.dart';
 import 'package:whatsapp_clone/view/screens/camera_section/camera_screen.dart';
 import 'package:whatsapp_clone/view/screens/chat_list/chat_list_screen.dart';
+import 'package:whatsapp_clone/view/screens/settings/settings_screen.dart';
 import 'package:whatsapp_clone/view/screens/status_section/status_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -52,7 +53,25 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           title: const Text('WhatsApp'),
           actions: [
             IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
+            PopupMenuButton(
+              icon: const Icon(Icons.more_vert),
+              padding: EdgeInsets.zero,
+              itemBuilder: (BuildContext context) => [
+                PopupMenuItem(child: const Text("New group"), onTap: () {}),
+                PopupMenuItem(child: const Text("New broadcast"), onTap: () {}),
+                PopupMenuItem(
+                    child: const Text("Linked devices"), onTap: () {}),
+                PopupMenuItem(
+                    child: const Text("Starred messages"), onTap: () {}),
+                PopupMenuItem(child: const Text("Payments"), onTap: () {}),
+                PopupMenuItem(
+                    child: const Text("Settings"),
+                    onTap: () async {
+                      await Future.delayed(const Duration(milliseconds: 1));
+                      Get.to(() => const SettingsScreen());
+                    }),
+              ],
+            ),
           ],
           toolbarHeight: 48.0,
           elevation: 0.0,

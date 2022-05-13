@@ -72,4 +72,14 @@ class UserRepository {
 
     return response;
   }
+
+  Future<dynamic> getUserDetailsById(String userId) async {
+    var response = await _httpHelper.get(Api.userDetailsById + userId);
+
+    if (response.runtimeType.toString() == "Response") {
+      UserModel userStatusModel = UserModel.fromJson(jsonDecode(response.body));
+      return userStatusModel;
+    }
+    return response;
+  }
 }

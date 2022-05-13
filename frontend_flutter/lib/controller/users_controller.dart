@@ -1,20 +1,30 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:whatsapp_clone/const_files/db_names.dart';
 import 'package:whatsapp_clone/const_files/keys/shared_pref_keys.dart';
+import 'package:whatsapp_clone/data/db_models/db_chat_list_model.dart';
 import 'package:whatsapp_clone/data/db_models/db_user_model.dart';
 import 'package:whatsapp_clone/data/model/user/user_model.dart';
 import 'package:whatsapp_clone/data/model/user/users_list_model.dart';
 import 'package:whatsapp_clone/data/repository/user_repository.dart';
+import 'package:whatsapp_clone/services/shared_pref.dart';
 import 'package:whatsapp_clone/utility/utility.dart';
+
+class UserData {
+  String id, imagePath;
+
+  UserData(this.id, this.imagePath);
+}
 
 class UsersController extends GetxController {
   UserRepository userRepository = UserRepository();
+  SharedPref sharedPref = SharedPref();
 
   Box<DbUserModel> userBox = Hive.box<DbUserModel>(DbNames.user);
+  Box<DbChatListModel> chatList = Hive.box<DbChatListModel>(DbNames.chatList);
 
   Rx<UserModel> userData = UserModel().obs;
   Rx<UsersListModel> usersListData = UsersListModel().obs;
@@ -23,6 +33,14 @@ class UsersController extends GetxController {
   RxInt usersCount = 0.obs;
 
   RxBool contactsLoading = false.obs;
+
+  RxList<DbChatListModel> chatListData = <DbChatListModel>[].obs;
+
+  void getChatList() {
+    chatListData.clear();
+    chatList.toMap().forEach((key, value) => chatListData.add(value));
+    chatListData.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  }
 
   Future<void> getMyDetails() async {
     var result = await userRepository.getMyDetails();
@@ -33,10 +51,8 @@ class UsersController extends GetxController {
         userData.value = data;
         userId.value = data.id ?? "";
 
-        SharedPreferences preferences = await SharedPreferences.getInstance();
-
-        preferences.setString(SharedPrefKeys.userId, userId.value);
-        preferences.setString(
+        sharedPref.saveString(SharedPrefKeys.userId, userId.value);
+        sharedPref.saveString(
             SharedPrefKeys.userDetails, data.toJson().toString());
       } else {
         Utility.httpResponseValidation(result);
@@ -95,8 +111,8 @@ class UsersController extends GetxController {
       DbUserModel dbUserModel = DbUserModel(
         name: name,
         id: userData.id ?? "",
-        imagePath: userData.imageName ?? "",
-        phone: userData.phoneWithDialCode ?? "",
+        imagePath: userData.image ?? "",
+        phone: phoneNumber,
         about: userData.about ?? "",
       );
 
@@ -112,6 +128,53 @@ class UsersController extends GetxController {
     } else {
       await Permission.contacts.request();
       return await ContactsService.getContacts();
+    }
+  }
+
+  Future<void> updateProfileImage() async {
+    XFile? imagePicker = await ImagePicker()
+        .pickImage(source: ImageSource.camera, imageQuality: 30);
+
+    if (imagePicker != null) {
+      dynamic result =
+          await userRepository.profileImageUpload(imagePicker.path);
+
+      if (result.runtimeType.toString() == "Response") getMyDetails();
+    }
+  }
+
+  Future<void> updateProfileByPhoneNumber(String phoneNumber) async {
+    var result = await userRepository.getUserDetails(phoneNumber);
+
+    if (result.runtimeType.toString() == "UserModel") {
+      UserModel data = result;
+      DbUserModel? userData = userBox.get(data.id);
+
+      userData!.imagePath == data.image;
+
+      userBox.put(data.id, userData);
+    }
+  }
+
+  Future<void> updateProfileById(String userId) async {
+    var result = await userRepository.getUserDetailsById(userId);
+
+    if (result.runtimeType.toString() == "UserModel") {
+      UserModel data = result;
+
+      String imagePath = userBox.get(userId)?.imagePath ?? "";
+      if (imagePath != data.image) {
+        DbChatListModel oldData =
+            chatListData.singleWhere((element) => element.userId == userId);
+      }
+      DbUserModel dbUserModel = DbUserModel(
+          id: data.id ?? "",
+          name: data.name ?? "",
+          about: data.about ?? "",
+          imagePath: data.image ?? "",
+          phone: data.phoneWithDialCode ?? "");
+
+      userBox.put(userId, dbUserModel);
     }
   }
 

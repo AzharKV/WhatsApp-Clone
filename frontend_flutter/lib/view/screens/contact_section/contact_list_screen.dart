@@ -6,6 +6,7 @@ import 'package:whatsapp_clone/const_files/my_color.dart';
 import 'package:whatsapp_clone/controller/chat_controller.dart';
 import 'package:whatsapp_clone/controller/users_controller.dart';
 import 'package:whatsapp_clone/data/db_models/db_user_model.dart';
+import 'package:whatsapp_clone/view/widgets/no_user_image.dart';
 
 class ContactListScreen extends StatelessWidget {
   const ContactListScreen({Key? key}) : super(key: key);
@@ -71,6 +72,8 @@ class ContactListScreen extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               DbUserModel userData = data[index];
 
+              // userController.updateProfileById(userData.phone);
+
               if (index == 0)
                 return Column(
                   children: [
@@ -104,15 +107,11 @@ class ContactListScreen extends StatelessWidget {
                             userData.id, userData.name);
                       },
                       title: Text(userData.name),
-                      leading: Container(
-                        height: 40.0,
-                        width: 40.0,
-                        decoration: BoxDecoration(
-                            color: Colors.grey.shade300,
-                            shape: BoxShape.circle),
-                        child: const Icon(Icons.person,
-                            size: 35.0, color: Colors.white),
-                      ),
+                      leading: userData.imagePath.isEmpty
+                          ? const NoUserImage()
+                          : CircleAvatar(
+                              backgroundImage: NetworkImage(userData.imagePath),
+                              radius: 23.0),
                     ),
                   ],
                 );
@@ -128,16 +127,11 @@ class ContactListScreen extends StatelessWidget {
                             userData.id, userData.name);
                       },
                       title: Text(userData.name),
-                      leading: Container(
-                        height: 40.0,
-                        width: 40.0,
-                        alignment: Alignment.bottomCenter,
-                        decoration: BoxDecoration(
-                            color: Colors.grey.shade300,
-                            shape: BoxShape.circle),
-                        child: const Icon(Icons.person,
-                            size: 35.0, color: Colors.white),
-                      ),
+                      leading: userData.imagePath.isEmpty
+                          ? const NoUserImage()
+                          : CircleAvatar(
+                              backgroundImage: NetworkImage(userData.imagePath),
+                              radius: 23.0),
                     ),
                     const ListTile(
                       title: Text("Invite friends"),
@@ -158,14 +152,11 @@ class ContactListScreen extends StatelessWidget {
                         userData.id, userData.name);
                   },
                   title: Text(userData.name),
-                  leading: Container(
-                    height: 40.0,
-                    width: 40.0,
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade300, shape: BoxShape.circle),
-                    child: const Icon(Icons.person,
-                        size: 35.0, color: Colors.white),
-                  ),
+                  leading: userData.imagePath.isEmpty
+                      ? const NoUserImage()
+                      : CircleAvatar(
+                          backgroundImage: NetworkImage(userData.imagePath),
+                          radius: 23.0),
                 );
             },
           );

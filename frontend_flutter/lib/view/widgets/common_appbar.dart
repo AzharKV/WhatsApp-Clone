@@ -14,6 +14,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.whiteBackground = false,
     this.automaticallyImplyLeading = true,
+    this.leadingWhiteColor = false,
   }) : super(key: key);
 
   final String? title;
@@ -25,6 +26,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final bool whiteBackground;
   final bool automaticallyImplyLeading;
+  final bool leadingWhiteColor;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +48,10 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: elevation,
       actions: actions,
       automaticallyImplyLeading: automaticallyImplyLeading,
-      iconTheme: const IconThemeData(color: Colors.grey),
-      actionsIconTheme: const IconThemeData(color: Colors.grey),
+      iconTheme:
+          IconThemeData(color: leadingWhiteColor ? Colors.white : Colors.grey),
+      actionsIconTheme:
+          IconThemeData(color: leadingWhiteColor ? Colors.white : Colors.grey),
       systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor:
               whiteBackground ? Colors.grey.shade400 : backgroundColor),

@@ -12,7 +12,7 @@ class UserModel {
   UserModel({
     this.id,
     this.name,
-    this.imageName,
+    this.image,
     this.about,
     this.lastSeen,
     this.status,
@@ -25,7 +25,7 @@ class UserModel {
 
   String? id;
   String? name;
-  String? imageName;
+  String? image;
   String? about;
   DateTime? lastSeen;
   bool? status;
@@ -38,7 +38,7 @@ class UserModel {
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["id"] == null ? null : json["id"],
         name: json["name"] == null ? null : json["name"],
-        imageName: json["imageName"] == null ? null : json["imageName"],
+        image: json["image"] == null ? null : json["image"],
         about: json["about"] == null ? null : json["about"],
         lastSeen:
             json["lastSeen"] == null ? null : DateTime.parse(json["lastSeen"]),
@@ -57,7 +57,7 @@ class UserModel {
   Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
         "name": name == null ? null : name,
-        "imageName": imageName == null ? null : imageName,
+        "image": image == null ? null : image,
         "about": about == null ? null : about,
         "lastSeen": lastSeen == null ? null : lastSeen!.toIso8601String(),
         "status": status == null ? null : status,
