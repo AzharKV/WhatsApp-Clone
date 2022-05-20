@@ -14,6 +14,8 @@ import 'package:whatsapp_clone/services/shared_pref.dart';
 import 'package:whatsapp_clone/utility/utility.dart';
 
 class SocketController extends GetxController {
+  UsersController usersController = Get.put(UsersController());
+
   Box messageBox = Hive.box<DbMessageModel>(DbNames.message);
   Box chatListBox = Hive.box<DbChatListModel>(DbNames.chatList);
 
@@ -77,6 +79,7 @@ class SocketController extends GetxController {
       "receivedAt": currentDateTime.toIso8601String(),
       "fromId": messageModel.from
     });
+    usersController.getChatList();
   }
 
   void addToMessageDb(MessageModel messageModel, DateTime currentDateTime) {
@@ -128,6 +131,7 @@ class SocketController extends GetxController {
     DbChatListModel chatData = chatListBox.get(messageData.to);
     chatData.tickCount = 2;
     chatListBox.put(messageData.to, chatData);
+    usersController.getChatList();
   }
 
   void messageOpened(data) {
@@ -143,5 +147,6 @@ class SocketController extends GetxController {
     DbChatListModel chatData = chatListBox.get(messageData.to);
     chatData.tickCount = 3;
     chatListBox.put(messageData.to, chatData);
+    usersController.getChatList();
   }
 }

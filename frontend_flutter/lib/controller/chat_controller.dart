@@ -51,6 +51,8 @@ class ChatController extends GetxController {
       chatData.unreadCount = 0;
       chatListBox.put(userId, chatData);
     }
+
+    userController.getChatList();
   }
 
   Future<void> checkUserStatus(String id) async {
