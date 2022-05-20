@@ -134,11 +134,11 @@ class PhoneEnterScreen extends StatelessWidget {
           const Spacer(),
           ElevatedButton(
             onPressed: () => registerController.navToOtpScreen(),
-            child: const Text("Next"),
             style: ButtonStyle(
               backgroundColor: MaterialStateColor.resolveWith(
                   (states) => MyColor.buttonColor),
             ),
+            child: const Text("Next"),
           ),
           sizedBoxH16,
         ],

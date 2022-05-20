@@ -94,11 +94,11 @@ class OTPEnterScreen extends StatelessWidget {
             () => registerController.otpValue.isNotEmpty
                 ? ElevatedButton(
                     onPressed: () => registerController.verifyOTP(),
-                    child: const Text("Verify"),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateColor.resolveWith(
                           (states) => MyColor.buttonColor),
                     ),
+                    child: const Text("Verify"),
                   )
                 : const SizedBox(),
           ),

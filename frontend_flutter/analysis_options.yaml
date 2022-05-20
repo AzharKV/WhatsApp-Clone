@@ -26,7 +26,6 @@ linter:
     curly_braces_in_flow_control_structures: false
     prefer_if_null_operators: false
     always_declare_return_types: true
-    unnecessary_lambdas: true
     unnecessary_getters_setters: true
     prefer_const_declarations: true
 

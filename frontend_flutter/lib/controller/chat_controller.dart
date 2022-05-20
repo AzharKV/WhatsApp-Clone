@@ -67,7 +67,7 @@ class ChatController extends GetxController {
     }
 
     try {
-      String eventString = '/user_status' + id;
+      String eventString = '/user_status$id';
 
       socketController.socket
           .on(eventString, (data) => userStatus.value = data ?? false);

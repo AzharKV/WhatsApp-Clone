@@ -163,10 +163,10 @@ class UsersController extends GetxController {
       UserModel data = result;
 
       String imagePath = userBox.get(userId)?.imagePath ?? "";
-      if (imagePath != data.image) {
-        DbChatListModel oldData =
-            chatListData.singleWhere((element) => element.userId == userId);
-      }
+
+      if (imagePath != data.image)
+        chatListData.singleWhere((element) => element.userId == userId);
+
       DbUserModel dbUserModel = DbUserModel(
           id: data.id ?? "",
           name: data.name ?? "",

@@ -31,7 +31,7 @@ class UserRepository {
   }
 
   Future<dynamic> getUserStatus(String id) async =>
-      await _httpHelper.get(Api.userStatus + "/" + id);
+      await _httpHelper.get("${Api.userStatus}/$id");
 
   Future<dynamic> getUserDetails(String phoneNumber) async {
     var response = await _httpHelper.get(Api.userDetails + phoneNumber);

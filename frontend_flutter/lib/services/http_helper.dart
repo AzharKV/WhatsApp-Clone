@@ -138,7 +138,7 @@ class HttpHelper {
       String authToken =
           await SharedPref().readString(SharedPrefKeys.authToken);
 
-      headers.addAll({HttpHeaders.authorizationHeader: "Bearer " + authToken});
+      headers.addAll({HttpHeaders.authorizationHeader: "Bearer $authToken"});
     }
 
     return headers;

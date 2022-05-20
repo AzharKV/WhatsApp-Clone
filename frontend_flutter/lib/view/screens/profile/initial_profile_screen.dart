@@ -33,13 +33,6 @@ class InitialProfileScreen extends StatelessWidget {
               () => Container(
                 width: Get.width / 2.5,
                 height: Get.width / 2.5,
-                child: profileController.imageUrl.value.isNotEmpty
-                    ? null
-                    : const Icon(
-                        Icons.camera_alt_rounded,
-                        size: 50.0,
-                        color: Colors.grey,
-                      ),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.grey.shade300,
@@ -49,6 +42,13 @@ class InitialProfileScreen extends StatelessWidget {
                           fit: BoxFit.cover)
                       : null,
                 ),
+                child: profileController.imageUrl.value.isNotEmpty
+                    ? null
+                    : const Icon(
+                        Icons.camera_alt_rounded,
+                        size: 50.0,
+                        color: Colors.grey,
+                      ),
               ),
             ),
           ),
@@ -79,11 +79,11 @@ class InitialProfileScreen extends StatelessWidget {
           const Spacer(),
           ElevatedButton(
             onPressed: () => profileController.navTOHomeScreen(),
-            child: const Text("Next"),
             style: ButtonStyle(
               backgroundColor: MaterialStateColor.resolveWith(
                   (states) => MyColor.buttonColor),
             ),
+            child: const Text("Next"),
           ),
           sizedBoxH16,
         ],
