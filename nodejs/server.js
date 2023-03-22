@@ -33,7 +33,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //set server ip to access from every where
 app.use((req, res, next) => {
   req.io = io;
-  req.serverIp = "http://192.168.18.48:5678/";
+  req.serverIp = "https://whatsappclone-0jyg.onrender.com/";
   return next();
 });
 
